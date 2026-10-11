@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>阿福的最后一班邮路</title>
+  <meta name="description" content="一只邮差狗，替生病的老邮差送完最后五封信。一款可以在浏览器里玩的像素小镇剧情游戏。" />
+  <meta property="og:title" content="阿福的最后一班邮路" />
+  <meta property="og:description" content="一只邮差狗，替生病的老邮差送完最后五封信。" />
+  <meta property="og:image" content="cover.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>✉</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main id="frame">
+    <div id="stage">
+      <canvas id="screen" width="320" height="192"></canvas>
+
+      <!-- HUD -->
+      <div id="hud" class="hidden">
+        <div id="hud-left"><span id="hud-area">栖湾镇</span></div>
+        <div id="hud-right">
+          <span id="hud-letters">✉ 0/5</span>
+          <span id="hud-mem">✦ 0/6</span>
+          <button id="btn-bag" class="hud-btn" title="邮包 (Q)">邮包 Q</button>
+          <button id="btn-sound" class="hud-btn" title="声音 (M)">♪</button>
+        </div>
+      </div>
+      <div id="banner"></div>
+      <div id="toast"></div>
+      <div id="prompt" class="hidden">空格 · 对话</div>
+
+      <!-- Dialogue -->
+      <div id="dialogue" class="hidden">
+        <canvas id="portrait" width="48" height="48"></canvas>
+        <div class="dlg-body">
+          <div id="dlg-name"></div>
+          <div id="dlg-text"></div>
+          <ol id="dlg-choices"></ol>
+          <div id="dlg-more">▼</div>
+        </div>
+      </div>
+
+      <!-- Bag -->
+      <div id="bag" class="hidden">
+        <div class="bag-head">
+          <button data-tab="letters" class="tab on">信件</button>
+          <button data-tab="items" class="tab">物品</button>
+          <button data-tab="memories" class="tab">记忆</button>
+          <button id="bag-close" class="tab close">✕</button>
+        </div>
+        <div id="bag-body"></div>
+      </div>
+
+      <!-- Memory / cutscene -->
+      <div id="scene" class="hidden">
+        <div id="scene-tag"></div>
+        <div id="scene-title"></div>
+        <div id="scene-text"></div>
+        <div id="scene-hint">空格 继续</div>
+      </div>
+
+      <!-- Title -->
+      <div id="title">
+        <div class="title-sub">栖湾镇 · 秋</div>
+        <h1>阿福的<br />最后一班邮路</h1>
+        <div class="title-en">THE LAST MAIL ROUTE</div>
+        <div id="title-menu">
+          <button id="btn-continue" class="menu-btn hidden">继续旅程</button>
+          <button id="btn-new" class="menu-btn">新的一天</button>
+        </div>
+        <div id="title-endings"></div>
+        <div class="title-keys">方向键 / WASD 移动 · 空格 对话 · Q 邮包 · X 汪 · M 声音</div>
+      </div>
+
+      <!-- Ending -->
+      <div id="ending" class="hidden">
+        <div id="ending-scroll"></div>
+      </div>
+
+      <!-- Touch controls -->
+      <div id="touch" class="hidden">
+        <div id="dpad">
+          <button data-dir="up">▲</button>
+          <button data-dir="left">◀</button>
+          <button data-dir="right">▶</button>
+          <button data-dir="down">▼</button>
+        </div>
+        <div id="abtns">
+          <button id="t-b" data-key="bark">汪</button>
+          <button id="t-a" data-key="act">A</button>
+        </div>
+      </div>
+    </div>
+    <footer>阿福的最后一班邮路 · 一款开源的小镇剧情游戏 · <a href="docs/" target="_blank">设计文档</a></footer>
+  </main>
+
+  <!-- 引擎与数据：普通 script，按顺序加载，可直接双击 index.html 打开 -->
+  <script src="js/util.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/tiles.js"></script>
+  <script src="data/world.js"></script>
+  <script src="data/story-main.js"></script>
+  <script src="data/story-town.js"></script>
+  <script src="data/story-endings.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/dialogue.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

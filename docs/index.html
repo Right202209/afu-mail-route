@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>阿福的最后一班邮路 · 设计文档</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="doc.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">阿福的最后一班邮路 · 设计文档</h1>
+</header>
+<p style="text-align:center">
+<a href="../">▶ 开始游戏</a>
+</p>
+<nav class="toc">
+<ol type="1">
+<li><a href="#阿福的最后一班邮路游戏设计文档">游戏设计文档</a>　2. <a
+href="#阿福的最后一班邮路故事线与攻略">故事线与攻略</a>（含剧透）　3. <a
+href="#剧本编写指南怎么改剧情加角色加结局">剧本编写指南</a>　4. <a
+href="#部署指南发布到-github-pages">部署指南</a></li>
+</ol>
+</nav>
+<h1
+id="阿福的最后一班邮路游戏设计文档">《阿福的最后一班邮路》游戏设计文档</h1>
+<blockquote>
+<p>版本 1.0 · 2026-10-11 类型：俯视角像素剧情探索（2D RPG 式小镇漫步）
+平台：浏览器（桌面键盘 / 手机触屏），静态托管于 GitHub Pages
+时长：一周目约 25–40 分钟；全结局约 1.5–2 小时</p>
+</blockquote>
+<figure>
+<img src="img/town.png" alt="小镇" />
+<figcaption aria-hidden="true">小镇</figcaption>
+</figure>
+<h2 id="一句话概念">1. 一句话概念</h2>
+<p><strong>一只邮差狗，替生病的老邮差送完最后五封信。</strong></p>
+<p>栖湾镇的邮差老周送了三十八年信。上个月，他因为阿尔茨海默病住进了山坡上的疗养院。他在邮局抽屉里留下了五封”一定要送到”的信，以及一封写着”阿福
+收”的信。阿福，是他养了十一年的狗。</p>
+<p>玩家扮演阿福，在一天之内走遍小镇，把信送到五个人手里。每送出一封信，就解开一个人的心结，也找回一段老周的往事。最后，阿福带着这一路找回的记忆上山，去见那个可能已经不认识它的人。</p>
+<h2 id="参考与取舍">2. 参考与取舍</h2>
+<p>参考作品：<a href="https://daisyh.dev/game">daisyh.dev/game</a>（基于
+game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>参考站的做法</th>
+<th>本作的做法</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Phaser 3 引擎，Vite 打包</td>
+<td>零依赖原生 Canvas，普通 <code>&lt;script&gt;</code></td>
+<td>不用构建，直接推到 GitHub Pages；双击 <code>index.html</code>
+也能玩</td>
+</tr>
+<tr class="even">
+<td>世界数据在 <code>world.json</code>，需服务器加载</td>
+<td>数据写成 JS 文件（<code>data/*.js</code>）</td>
+<td>本地 <code>file://</code> 打开不受跨域限制</td>
+</tr>
+<tr class="odd">
+<td>一张横向长图，5 个区域并排</td>
+<td>60×44 格的完整小镇：河、海、广场、花坡</td>
+<td>能走出”邮路”的感觉，有远近、有捷径</td>
+</tr>
+<tr class="even">
+<td>NPC 是”不同时期的同一个人”，对话树只用来问答</td>
+<td>12 个各有故事的居民，对话会改变世界状态</td>
+<td>题目要求”丰富的故事线”</td>
+</tr>
+<tr class="odd">
+<td>计数”已交谈 x/12”</td>
+<td>计数”信件 x/5、记忆 x/6” + 4 个结局</td>
+<td>进度和情感目标绑在一起</td>
+</tr>
+<tr class="even">
+<td>像素美术用素材图集</td>
+<td>所有瓷砖、建筑、角色都用代码画出来，自动描边</td>
+<td>没有版权问题，改颜色只改一行</td>
+</tr>
+</tbody>
+</table>
+<p>保留下来的精髓：<strong>像素小镇、走过去按空格对话、对话框逐字出现、选项可以用方向键/数字键选</strong>。</p>
+<h2 id="设计支柱">3. 设计支柱</h2>
+<ol type="1">
+<li><strong>狗不会说话。</strong>
+阿福所有的”台词”都是动作：【趴下，等】【叼出那张旧合影】【歪头】【汪！】。玩家的选择是”怎么陪伴”，而不是”说什么”。</li>
+<li><strong>每封信都晚到了，但还来得及。</strong>
+五封信全都指向”今天”：船今天傍晚靠岸，妹妹坐今天的末班车，小雨今天十岁，报到明天截止，四十年没响的钟今天可以再响。老周把它们留到了”该到的那一天”。</li>
+<li><strong>记忆是可以送回去的东西。</strong>
+老周在忘记一切。阿福送信的路上会想起六段老周的往事，最后在疗养院里，玩家要把这些往事用动作”还给”他。</li>
+<li><strong>克制的诱惑。</strong>
+黑猫煤球会怂恿你偷看信。偷看能得到线索，但”心是不能偷看的，只能送到”。</li>
+</ol>
+<h2 id="核心循环">4. 核心循环</h2>
+<pre><code>读信封上的地址/线索  →  在镇上走、问人、找东西  →  把信送到
+       ↑                                              ↓
+   新线索、新物品  ←  对方的反应、选择分支、记忆碎片  ←</code></pre>
+<ul>
+<li><strong>送信</strong>：每个收信人都有一条小故事线，有的要先找到人（小雨躲起来了、阿木不在桥下），有的要带上对的东西（旧合影、蒲公英、画），有的要等待（老海）。</li>
+<li><strong>记忆</strong>：在关键选择上做出”陪伴”的选择，就会想起老周的一段往事（全屏回忆过场）。</li>
+<li><strong>时间</strong>：每送出一封信，天色就往傍晚推进一档；送完五封后路灯亮起，拆开最后一封信时天色入夜。</li>
+</ul>
+<h2 id="操作">5. 操作</h2>
+<table>
+<thead>
+<tr class="header">
+<th>操作</th>
+<th>键盘</th>
+<th>触屏</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>移动</td>
+<td>方向键 / WASD</td>
+<td>左下方向盘</td>
+</tr>
+<tr class="even">
+<td>对话 / 查看 / 确认</td>
+<td>空格 / 回车 / Z</td>
+<td>A 键，或点对话框</td>
+</tr>
+<tr class="odd">
+<td>选择选项</td>
+<td>↑↓ 或数字键 1–9</td>
+<td>直接点选项</td>
+</tr>
+<tr class="even">
+<td>汪</td>
+<td>X / B</td>
+<td>“汪”键</td>
+</tr>
+<tr class="odd">
+<td>邮包（信件、物品、记忆）</td>
+<td>Q / Tab / I</td>
+<td>右上”邮包”</td>
+</tr>
+<tr class="even">
+<td>声音开关</td>
+<td>M</td>
+<td>右上 ♪</td>
+</tr>
+<tr class="odd">
+<td>全屏</td>
+<td>F</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>面前有能互动的东西时，头顶会出现一个跳动的黄色小箭头，底部提示”空格 ·
+对话 / 查看”。</p>
+<h2 id="系统">6. 系统</h2>
+<h3 id="信件主线进度">6.1 信件（主线进度）</h3>
+<p>邮包里有 6 封信：5 封待送 + 1 封”阿福
+收”。每封信在邮包里显示收件人、寄件人和<strong>随进度变化的线索</strong>（例如林阿姨那封，会从”面包店在广场东边”逐步变为”去问问隔壁的钱叔”，再变为”她在东边车站”）。送完五封后，“阿福
+收”出现【拆开】按钮。</p>
+<h3 id="记忆碎片6-段">6.2 记忆碎片（6 段）</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>标题</th>
+<th>怎么得到</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>雨夜的邮袋</td>
+<td>开场与小吴对话后自动获得</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>码头上的空位</td>
+<td>在老海身边【趴下，等】</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>没有寄件人的蛋糕</td>
+<td>把面包店后面的旧合影交给林阿姨</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>提前两年画的圈</td>
+<td>把花坡上的蒲公英交给小雨</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>墙缝里的信</td>
+<td>修好钟楼，让陈师傅和苏婆婆在钟楼下重逢</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>路是走出来的</td>
+<td>把桥头那幅没画完的画交给阿木</td>
+</tr>
+</tbody>
+</table>
+<p>记忆可以在邮包”记忆”页反复回看。</p>
+<h3 id="偷看">6.3 偷看</h3>
+<p>煤球每次都会问”要不要看看某封信”。偷看会弹出信的全文，并给一句线索提示；收信人收到时会提示”封口被撕开过”。<strong>偷看
+3
+封及以上</strong>会进入结局”拆开的信”，<strong>偷看任意一封</strong>都无法达成完美结局。</p>
+<h3 id="结局判定终章把记忆还给老周">6.4
+结局判定（终章：把记忆还给老周）</h3>
+<p>在疗养院院子里，老周不认识阿福。对话里会出现与你已获得的记忆一一对应的动作选项。每做出一个，老周就想起一点；<strong>做满
+5 个</strong>，他会叫出”阿福”。</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>结局</th>
+<th>条件</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>交班（完美）</td>
+<td>叫出名字 + 0 次偷看 + 6 段记忆全齐 + 五条支线都走到最好的分支</td>
+</tr>
+<tr class="even">
+<td>拆开的信</td>
+<td>偷看 ≥ 3 封</td>
+</tr>
+<tr class="odd">
+<td>回家</td>
+<td>叫出名字（≥5 个记忆动作）</td>
+</tr>
+<tr class="even">
+<td>邮路尽头</td>
+<td>其余情况</td>
+</tr>
+</tbody>
+</table>
+<p>每个结局后有”后来”尾声：七个角色/地点各自按你的选择显示不同段落（共
+14
+段可能的尾声）。已解锁的结局记录在浏览器里，标题画面显示收集进度。</p>
+<h3 id="存档">6.5 存档</h3>
+<p>每段对话结束自动存档到
+<code>localStorage</code>，标题画面出现”继续旅程”。结局后存档清除，但结局收集记录保留。</p>
+<h2 id="世界">7. 世界</h2>
+<figure>
+<img src="img/map.png" alt="地图" />
+<figcaption aria-hidden="true">地图</figcaption>
+</figure>
+<p>60×44 格（每格 16
+像素）。河从北向南把小镇分成东西两半，南边是海。</p>
+<table>
+<thead>
+<tr class="header">
+<th>区域</th>
+<th>位置</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>栖湾邮局</td>
+<td>西侧主路边</td>
+<td>出生点；小吴、煤球、邮筒、公告栏日历</td>
+</tr>
+<tr class="even">
+<td>栖湾小学</td>
+<td>西北</td>
+<td>王老师、操场、学校后面的大樟树（小雨）</td>
+</tr>
+<tr class="odd">
+<td>码头</td>
+<td>西南海边</td>
+<td>栈桥尽头的老海、渔具屋、船</td>
+</tr>
+<tr class="even">
+<td>钟楼</td>
+<td>正北</td>
+<td>停在 4:10 的钟、陈师傅</td>
+</tr>
+<tr class="odd">
+<td>中心广场</td>
+<td>正中</td>
+<td>老井、刘奶奶、阿杰、集市摊位</td>
+</tr>
+<tr class="even">
+<td>商业街</td>
+<td>广场东</td>
+<td>林记面包（今日歇业）、钱记小卖部、两店之间的小巷</td>
+</tr>
+<tr class="odd">
+<td>车站</td>
+<td>东</td>
+<td>公交站与长椅（林阿姨）</td>
+</tr>
+<tr class="even">
+<td>花坡</td>
+<td>东北高地</td>
+<td>野花、蒲公英、苏婆婆的紫屋顶小屋</td>
+</tr>
+<tr class="odd">
+<td>白房子</td>
+<td>最东北</td>
+<td>疗养院，篱笆与铁门、何护士、老周</td>
+</tr>
+<tr class="even">
+<td>东滩</td>
+<td>东南</td>
+<td>礁石上的阿木</td>
+</tr>
+<tr class="odd">
+<td>河边</td>
+<td>南桥一带</td>
+<td>桥头的画架</td>
+</tr>
+</tbody>
+</table>
+<h2 id="角色">8. 角色</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>角色</th>
+<th>身份</th>
+<th>在故事里</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>阿福</td>
+<td>柴犬色的邮差狗，背蓝色邮包</td>
+<td>玩家</td>
+</tr>
+<tr class="even">
+<td>老周（周守信）</td>
+<td>送了三十八年信的老邮差</td>
+<td>终章才见到；一直通过信、记忆和别人的话出现</td>
+</tr>
+<tr class="odd">
+<td>小吴</td>
+<td>城里来的临时邮局职员，来了三周</td>
+<td>引导者；不认路</td>
+</tr>
+<tr class="even">
+<td>煤球</td>
+<td>邮局门口的黑猫，会说话</td>
+<td>诱惑者 &amp; 线索提供者</td>
+</tr>
+<tr class="odd">
+<td>老海</td>
+<td>码头的倔老头</td>
+<td>第一封信：十二年没见的儿子今天回来</td>
+</tr>
+<tr class="even">
+<td>林阿姨（林秀）</td>
+<td>面包店老板娘</td>
+<td>第二封信：二十年没说话的妹妹</td>
+</tr>
+<tr class="odd">
+<td>小雨</td>
+<td>十岁的小女孩，妈妈两年前去世</td>
+<td>第三封信：妈妈留给她十岁生日的信</td>
+</tr>
+<tr class="even">
+<td>王老师</td>
+<td>小雨的班主任</td>
+<td>线索</td>
+</tr>
+<tr class="odd">
+<td>陈师傅</td>
+<td>守钟人</td>
+<td>第四封信：四十年前没收到的信</td>
+</tr>
+<tr class="even">
+<td>苏婆婆（苏婉）</td>
+<td>花坡上的独居老人</td>
+<td>第四封信的寄信人</td>
+</tr>
+<tr class="odd">
+<td>阿木</td>
+<td>桥下画画的年轻人</td>
+<td>第五封信：美术学院录取通知，明天截止</td>
+</tr>
+<tr class="even">
+<td>钱叔 / 阿杰 / 刘奶奶</td>
+<td>小卖部老板 / 广场上的男孩 / 井边的老奶奶</td>
+<td>线索、传闻、老周的旧事</td>
+</tr>
+<tr class="odd">
+<td>何护士</td>
+<td>疗养院护士</td>
+<td>守门人</td>
+</tr>
+</tbody>
+</table>
+<h2 id="美术与声音">9. 美术与声音</h2>
+<ul>
+<li><strong>分辨率</strong>：内部
+320×192，按设备像素比整数倍放大，<code>image-rendering: pixelated</code>。</li>
+<li><strong>美术</strong>：所有图形由
+<code>js/sprites.js</code>、<code>js/tiles.js</code>
+逐像素绘制，角色自动加 1
+像素深色描边。人物由参数拼装（发型、上衣、围裙、眼镜、拐杖……），新增角色只需写一行外观。</li>
+<li><strong>昼夜</strong>：7 档色调（早晨→黄昏→入夜），用 multiply
+叠加；送满 4 封后路灯亮起。</li>
+<li><strong>界面</strong>：对话框、邮包、信纸、回忆都是 DOM
+覆盖层，中文字体清晰；按舞台宽度等比缩放。</li>
+<li><strong>声音</strong>：WebAudio
+实时合成——打字音、确认、狗叫、拾取、送达小号、记忆琶音、钟声，以及一段五声音阶的背景循环。没有任何音频文件。</li>
+</ul>
+<h2 id="技术架构">10. 技术架构</h2>
+<pre><code>index.html            页面骨架与覆盖层
+css/style.css         界面样式
+js/util.js            命名空间 G、随机数、描边、镜像
+js/audio.js           合成音效与背景乐
+js/sprites.js         角色精灵（阿福、人类生成器、猫、轮椅上的老周）
+js/tiles.js           地形、建筑、钟楼、道具绘制
+data/world.js         地图画刷、建筑、道具、区域
+data/story-main.js    信件/物品/记忆/过场/角色登场 + 邮局与道具对话
+data/story-town.js    五条故事线 + 居民线索
+data/story-endings.js 疗养院、终章、结局、尾声
+js/state.js           旗标/物品/计数/记忆、条件与效果解释器、存档
+js/map.js             生成格子与碰撞，预渲染地面
+js/input.js           键盘、触屏、按优先级分发输入
+js/dialogue.js        对话引擎
+js/ui.js              HUD、提示、过场、邮包、结局字幕
+js/game.js            主循环、移动、互动、镜头、昼夜、标题与结局</code></pre>
+<p><strong>数据驱动</strong>：所有剧情都是 <code>data/</code>
+里的纯数据，条件和效果是短字符串（如
+<code>'d:chen &amp; !f:clock_fixed'</code>、<code>'i:gear;m:m_sea'</code>）。写剧本不需要碰引擎代码，详见《剧本编写指南》。</p>
+<p><strong>已验证</strong>：自动化测试（Playwright）走通了全部 4
+个结局；检查了所有对话跳转、场景、物品、记忆引用都存在；用广度优先搜索确认每个
+NPC、道具和门都能走到。</p>
+<h1
+id="阿福的最后一班邮路故事线与攻略">《阿福的最后一班邮路》故事线与攻略</h1>
+<blockquote>
+<p>本文含全部剧透。</p>
+</blockquote>
+<h2 id="一背景">一、背景</h2>
+<p>栖湾镇是一个有河、有海、有花坡的小镇。镇上只有一个邮差，周守信，大家叫他老周。他送了三十八年信，“一天没歇过”，台风那年蹚着齐腰深的水把信送到。</p>
+<p>十一年前的一个雨夜，邮车送来的最后一个邮袋里，装着一只湿透的小狗。老周给它取名阿福，“有福气的福”。从那以后，栖湾的邮路上总是一个老人、一只狗。</p>
+<p>一个月前，老周的记性坏到在镇上迷路，住进了花坡最东边的白房子疗养院。城里派来的临时职员小吴，在他的抽屉里找到五封信，抽屉上贴着：“一定要送到。”</p>
+<p><strong>老周的秘密</strong>：这五封信，全都和”今天”有关。他怕自己会忘，把它们留到了”该到的那一天”，在日历上画了五个圈。可他也怕到了那天，自己连日历都看不懂了，于是又写了第六封信，给阿福。</p>
+<h2 id="二主线结构">二、主线结构</h2>
+<pre><code>序  一定要送到（开场过场）
+│   邮局门口：小吴交班 → 记忆①「雨夜的邮袋」
+│
+├─ 第一封  码头 · 老海 ·········· 十二年没见的儿子，今天傍晚靠岸
+├─ 第二封  车站 · 林阿姨 ········ 二十年没说话的妹妹，坐今天的末班车
+├─ 第三封  大樟树 · 小雨 ········ 妈妈留给她十岁生日的信
+├─ 第四封  钟楼 · 陈师傅 ········ 四十年前没收到的信，钟停在 4:10
+└─ 第五封  东滩 · 阿木 ·········· 美术学院录取通知，明天截止
+│   （五封顺序自由，可交叉推进）
+│
+├─ 拆开&quot;阿福 收&quot;（邮包里）→ 天色入夜
+├─ 白房子：何护士读到信末的&quot;附：请让这只狗进来&quot;→ 开门
+└─ 终章：把记忆一件一件还给老周 → 四个结局之一 → 尾声&quot;后来&quot;</code></pre>
+<h2 id="三五条故事线">三、五条故事线</h2>
+<h3 id="第一封-码头-老海">第一封 · 码头 · 老海</h3>
+<p><strong>信封</strong>：码头尽头，不爱说话的人　<strong>寄自</strong>：远洋货轮”栖湾号”·海生</p>
+<p>老海的儿子海生十二年前不顾反对去跑远洋，母亲在他出海时去世。老海对老周说：“他的信，退回去。”老周没有退。他把一百四十四封信收在邮局最里面的柜子里。最新这封说：这个月最后一个周六（就是今天）傍晚，船靠岸；“你要是来了，我就知道了。我不会先开口的，我跟你一样倔。”</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>选择</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>【把信放在他脚边，转身离开】</td>
+<td>送达。老海没看信，补网的手停住了。之后再来还可以选【趴下，等】</td>
+</tr>
+<tr class="even">
+<td>【在他旁边趴下，等】</td>
+<td>老海想起老周也是这样陪他坐；读信；把儿子小时候从船钟上拆下的<strong>黄铜齿轮</strong>交给你，“我要等的东西今天就回来了”。→
+记忆②「码头上的空位」</td>
+</tr>
+</tbody>
+</table>
+<p><strong>尾声</strong>：等过 → 老海先开口：“瘦了。”小吴在柜子里找到那
+144 封信，他读了一个冬天。／没等 →
+他背对着海假装补网，直到身后有人喊”爸”，网掉进了海里。</p>
+<h3 id="第二封-车站-林阿姨">第二封 · 车站 · 林阿姨</h3>
+<p><strong>信封</strong>：面包店的林姐（今天她可能不在店里）　<strong>寄自</strong>：城里·林青</p>
+<p>二十年前的今天，妹妹林青从车站坐车去了城里。两人大吵一架，谁也不肯先开口。可每年姐姐生日，邮局都会收到一个没写寄件人的蛋糕盒；每年妹妹生日，姐姐都托老周捎一袋刚出炉的桂花卷——老周替两个犟脾气的人跑了二十年。今天面包店”歇业”，因为林阿姨每年这天都去车站坐一整天。</p>
+<p><strong>寻人线索</strong>：面包店门口的木牌 →
+隔壁钱叔：“她每年今天都去东边的车站。” → 车站长椅。
+<strong>隐藏物品</strong>：面包店后墙根下的<strong>旧合影</strong>（当年她从窗户扔出去的姐妹合照）。</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>选择</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>【把信放在她手里】</td>
+<td>送达。“我才不是在等她。”她留在车站。之后带合影回来仍可触发温暖分支</td>
+</tr>
+<tr class="even">
+<td>【叼出那张旧合影】</td>
+<td>送达。她哭着笑：“我是不是太犟了。”回店里烤一炉”烫手的”桂花卷。→
+记忆③「没有寄件人的蛋糕」</td>
+</tr>
+</tbody>
+</table>
+<p><strong>尾声</strong>：合影 →
+“姐，你头发白了。”“好香。”第二年招牌上多了一个名字。／没合影 →
+妹妹先走过来：“姐，我饿了。”姐姐骂了句”活该”，走得很慢，好让后面的人跟得上。</p>
+<h3 id="第三封-大樟树-小雨">第三封 · 大樟树 · 小雨</h3>
+<p><strong>信封</strong>：小雨（十岁生日当天交给她）　<strong>寄自</strong>：（没有写寄件人）</p>
+<p>两年前的冬天，一个瘦瘦的女人把信交给老周：“请在我女儿十岁生日那天给她。我等不到了。”老周提前两年在日历上画了圈。今天，小雨下课就躲了起来——每年生日她都躲。</p>
+<p><strong>寻人线索</strong>：王老师（操场）→
+地上出现三只纸鹤，从学校门口绕到学校背后 →
+大樟树下的小雨。广场的阿杰也会”不小心”说漏嘴。
+<strong>纸鹤上的字</strong>：“妈妈，今天我十岁了。”／“王老师说，十岁是大孩子了，大孩子不可以哭。”／“可是我还是好想你。”
+<strong>隐藏物品</strong>：花坡上的<strong>蒲公英</strong>（苏婆婆提过”以前常有一对母女来吹蒲公英”）。</p>
+<p>妈妈的信：“难过的时候，可以哭。十岁也可以，二十岁也可以。……学校后面那棵大樟树，是你出生那年我种的。”</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>选择</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>（可选）【把纸鹤一只一只放回她手里】</td>
+<td>集齐三只纸鹤时出现，额外对白</td>
+</tr>
+<tr class="even">
+<td>【安静地靠在她身边】</td>
+<td>“你身上有太阳的味道。”</td>
+</tr>
+<tr class="odd">
+<td>【把蒲公英递给她】</td>
+<td>她对蒲公英许愿：“妈妈，我十岁了。我过得很好。”→
+记忆④「提前两年画的圈」（之后补交蒲公英也可以）</td>
+</tr>
+<tr class="even">
+<td>若已接下钟楼的委托</td>
+<td>小雨把八音盒里的<strong>铜齿轮</strong>送给你</td>
+</tr>
+<tr class="odd">
+<td>【汪！】/【歪头】</td>
+<td>“我以后能帮你送信吗？” 汪 →
+她成为<strong>见习邮差</strong>（完美结局条件之一）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="第四封-钟楼-陈师傅-苏婆婆">第四封 · 钟楼 · 陈师傅 &amp;
+苏婆婆</h3>
+<p><strong>信封</strong>：钟楼·守钟的人　<strong>寄自</strong>：苏婉（邮戳：四十年前）</p>
+<p>四十年前，陈师傅和苏婉约好下午四点在车站见，一起去城里。她没来。他回来后把钟停在了四点十分。其实苏婉被父亲锁在家里，托人寄了一封信：“你一个人去城里吧……等你学成了就回来，把钟修好。钟响的那天，我会在钟楼下等你。多久都等。”那封信掉进了邮局分拣柜后面的墙缝。上个月搬柜子时，老周找到了它——想立刻送去钟楼，走到半路，忘了自己要去哪儿。那是他第一次在镇上迷路。</p>
+<p><strong>任务</strong>：送信 → 陈师傅要修钟，缺一个铜齿轮。
+<strong>齿轮的三个来源</strong>（任选其一）： 1.
+码头老海（【趴下，等】之后给）； 2.
+小雨的八音盒（先接下钟楼委托，再给小雨送信）； 3. 问煤球 →
+面包店与小卖部之间的小巷里会出现一个”像被谁咬过”的齿轮。</p>
+<p>修好后钟声响起（全屏闪光与声波），苏婆婆从花坡走到钟楼下。与她对话触发重逢：“现在开口……还来得及吗？”“钟都响了。”→
+记忆⑤「墙缝里的信」</p>
+<p><strong>尾声</strong>：重逢 →
+每天下午四点十分，钟楼下的长椅上坐着两个老人。／钟修好但没对话 →
+紫色屋顶的小屋门开了，后来的事有好几个版本。／没修钟 →
+有人看见他背着工具箱，第一次走上花坡。</p>
+<h3 id="第五封-东滩-阿木">第五封 · 东滩 · 阿木</h3>
+<p><strong>信封</strong>：桥下的画家（他叫阿木，头发很乱）　<strong>寄自</strong>：省美术学院
+招生办</p>
+<p>阿木常在桥头陪老周说话、画画。他在画一幅《邮路》要送给老周：夕阳下的老邮差和背邮包的狗。可老周已经不认识他了，他画不下去，留下一张”不画了。画不出来。“的纸条，跑去东滩发呆。录取通知三个月前就到了，老周替他收着，还附了一张便条：”去吧。路是走出来的。“报到截止是明天，今天傍晚有最后一班车。</p>
+<p><strong>寻人线索</strong>：桥头画架（可【小心地把画叼走】）→
+钱叔：“他老往东滩礁石那儿跑。”</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>选择</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>【把那幅没画完的画放在他面前】</td>
+<td>他在老邮差眼角添了一道笑纹：“不是画得多好，是终于敢画完了。”把画《邮路》托你带给老周，去赶末班车。→
+记忆⑥「路是走出来的」</td>
+</tr>
+<tr class="even">
+<td>【歪着头看他】</td>
+<td>“我再想想。”之后带画回来仍可触发</td>
+</tr>
+</tbody>
+</table>
+<h3 id="煤球的诱惑">煤球的诱惑</h3>
+<p>煤球可以让你偷看任何一封还没送出的信（弹出全文 +
+一句线索）。看小雨那封时它自己都会说：“这一封，我们不该看的。”</p>
+<h2 id="四终章白房子">四、终章：白房子</h2>
+<ol type="1">
+<li>送满五封 → 打开邮包拆开”阿福 收”。 &gt;
+我知道你不认字。那你就闻一闻吧，上面有我的味道。……如果我认不出你了，别难过。你就趴在我脚边，像以前在码头那样。我会想起来的。就算想不起来名字，我也会知道，你是我的狗。
+&gt; 附：疗养院的护士同志，请让这只狗进来。它是来交班的。</li>
+<li>何护士读到”附”，打开铁门。</li>
+<li>老周坐在轮椅上，扣子扣错了一颗。“小狗？你是谁家的小狗？”</li>
+</ol>
+<p><strong>把记忆还给他</strong>：每段已获得的记忆对应一个动作——</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>记忆</th>
+<th>动作</th>
+<th>老周想起</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>① 雨夜的邮袋</td>
+<td>把湿漉漉的鼻子埋进他手心</td>
+<td>“我好像从雨里捡过什么东西”</td>
+</tr>
+<tr class="even">
+<td>② 码头上的空位</td>
+<td>趴在他脚边</td>
+<td>海浪，和一个不说话的倔老头</td>
+</tr>
+<tr class="odd">
+<td>③ 没有寄件人的蛋糕</td>
+<td>用爪子咚咚敲两下轮椅</td>
+<td>“不知道谁寄的。其实我知道。”</td>
+</tr>
+<tr class="even">
+<td>④ 提前两年画的圈</td>
+<td>把笔放进他手里</td>
+<td>“那封信……送到了吗？”</td>
+</tr>
+<tr class="odd">
+<td>⑤ 墙缝里的信</td>
+<td>竖起耳朵望向钟楼</td>
+<td>弄丢了四十年的信</td>
+</tr>
+<tr class="even">
+<td>⑥ 路是走出来的</td>
+<td>把《邮路》放在他膝上（没拿画就绕轮椅走两圈）</td>
+<td>“旁边一直有只狗。一直都有。”</td>
+</tr>
+</tbody>
+</table>
+<p>做满 5 个 → “阿……福。你是阿福。有福气的福。”
+随时可以选【把头搁在他的膝盖上】结束。</p>
+<h2 id="五结局">五、结局</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>结局</th>
+<th>条件</th>
+<th>最后一句</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>交班</strong>（完美）</td>
+<td>叫出名字；没偷看过；6
+段记忆；老海【等】、林阿姨【合影】、小雨【见习邮差】、钟楼重逢、阿木【赶车】</td>
+<td>“明天开始，栖湾的邮路，就交给你们了。我们下班吧。”</td>
+</tr>
+<tr class="even">
+<td><strong>拆开的信</strong></td>
+<td>偷看 ≥3 封</td>
+<td>“心是不能偷看的，只能送到。……下次别再拆了啊。”</td>
+</tr>
+<tr class="odd">
+<td><strong>回家</strong></td>
+<td>叫出名字</td>
+<td>“好。那我们下班吧。”整个栖湾镇的灯一盏一盏亮起来。</td>
+</tr>
+<tr class="even">
+<td><strong>邮路尽头</strong></td>
+<td>其余</td>
+<td>“小家伙，你明天还来吗？”“那我等你。”有些路走到了尽头，就变成了每天的习惯。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="六完美结局最短路线">六、完美结局最短路线</h2>
+<ol type="1">
+<li>邮局：与小吴对话。</li>
+<li>码头：老海【趴下，等】→ 得到齿轮。</li>
+<li>面包店后墙根捡旧合影 → 车站：林阿姨【叼出合影】。</li>
+<li>花坡捡蒲公英。</li>
+<li>小学操场找王老师 →
+学校后面大樟树：小雨【信】→【蒲公英】→【汪！】。</li>
+<li>钟楼：陈师傅【叼信】→ 再对话【齿轮】→ 钟响 →
+和钟楼下的苏婆婆对话。</li>
+<li>桥头画架【叼走】→ 东滩：阿木【信】→【画】。</li>
+<li>邮包里拆开”阿福 收” → 白房子：何护士 → 老周：依次做 5
+个记忆动作。</li>
+<li>全程不要让煤球拆信。</li>
+</ol>
+<h2 id="七主题">七、主题</h2>
+<ul>
+<li><strong>守信</strong>：老周的名字叫”守信”。整个故事是一个记性在消失的人，如何靠提前安排和一只狗，守住他最后的承诺。</li>
+<li><strong>晚到，但还来得及</strong>：每封信都迟了——12 年、20 年、2
+年、40 年、3 个月——却都在最后一天赶上了。</li>
+<li><strong>记忆不只在脑子里</strong>：老周忘了，但镇上每个人都替他记着一部分。阿福把这些碎片带上山，就是把他的一生送回给他。</li>
+<li><strong>说出口</strong>：五条支线里的人都卡在”谁先开口”。狗不会说话，却让每个人都开口了。</li>
+</ul>
+<h1
+id="剧本编写指南怎么改剧情加角色加结局">剧本编写指南：怎么改剧情、加角色、加结局</h1>
+<p>所有剧情都在 <code>data/</code> 目录里，是普通的 JavaScript
+对象。改完刷新浏览器就能看到，不需要编译。</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>文件</th>
+<th>放什么</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>data/world.js</code></td>
+<td>地图、建筑、道具、区域名</td>
+</tr>
+<tr class="even">
+<td><code>data/story-main.js</code></td>
+<td>物品、信件、记忆、过场文字、<strong>角色登场表</strong>，邮局和道具的对话</td>
+</tr>
+<tr class="odd">
+<td><code>data/story-town.js</code></td>
+<td>五条故事线和居民的对话</td>
+</tr>
+<tr class="even">
+<td><code>data/story-endings.js</code></td>
+<td>疗养院、终章、结局、尾声</td>
+</tr>
+</tbody>
+</table>
+<h2 id="对话节点">1. 对话节点</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lin_give<span class="op">:</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">who</span><span class="op">:</span> <span class="st">&#39;lin&#39;</span><span class="op">,</span>                       <span class="co">// 说话的人：角色 id；&#39;none&#39; 表示旁白（不显示头像）</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">fx</span><span class="op">:</span> <span class="st">&#39;d:lin;scene:letter_lin&#39;</span><span class="op">,</span>     <span class="co">// 进入这个节点时执行的效果</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">text</span><span class="op">:</span> [<span class="st">&#39;……这字，是阿青的。&#39;</span><span class="op">,</span> <span class="st">&#39;（她读了很久。）&#39;</span>]<span class="op">,</span>   <span class="co">// 多页，按空格翻页</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">go</span><span class="op">:</span> <span class="st">&#39;lin_give2&#39;</span><span class="op">,</span>                  <span class="co">// 播完后跳到哪个节点；不写就结束对话</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span></span></code></pre></div>
+<p>带选项：</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hai_first<span class="op">:</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">who</span><span class="op">:</span> <span class="st">&#39;hai&#39;</span><span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">text</span><span class="op">:</span> [<span class="st">&#39;……老周的狗。&#39;</span><span class="op">,</span> <span class="st">&#39;又是那小子的信吧。&#39;</span>]<span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">choices</span><span class="op">:</span> [</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">t</span><span class="op">:</span> <span class="st">&#39;【把信放在他脚边，转身离开】&#39;</span><span class="op">,</span> <span class="dt">fx</span><span class="op">:</span> <span class="st">&#39;d:hai;f:hai_left&#39;</span><span class="op">,</span> <span class="dt">go</span><span class="op">:</span> <span class="st">&#39;hai_left&#39;</span> }<span class="op">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">t</span><span class="op">:</span> <span class="st">&#39;【在他旁边趴下，等】&#39;</span><span class="op">,</span> <span class="dt">go</span><span class="op">:</span> <span class="st">&#39;hai_wait1&#39;</span> }<span class="op">,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">t</span><span class="op">:</span> <span class="st">&#39;【叼出旧合影】&#39;</span><span class="op">,</span> <span class="dt">if</span><span class="op">:</span> <span class="st">&#39;i:photo&#39;</span><span class="op">,</span> <span class="dt">go</span><span class="op">:</span> <span class="st">&#39;xxx&#39;</span> }<span class="op">,</span>   <span class="co">// 有条件才出现的选项</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">t</span><span class="op">:</span> <span class="st">&#39;【走开】&#39;</span> }<span class="op">,</span>                                   <span class="co">// 没有 go：结束对话</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span></span></code></pre></div>
+<p>按条件分支（第一个满足的生效）：</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hai_after<span class="op">:</span> { <span class="dt">who</span><span class="op">:</span> <span class="st">&#39;hai&#39;</span><span class="op">,</span> <span class="dt">go</span><span class="op">:</span> [</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">if</span><span class="op">:</span> <span class="st">&#39;f:hai_wait&#39;</span><span class="op">,</span> <span class="dt">go</span><span class="op">:</span> <span class="st">&#39;hai_after_w&#39;</span> }<span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">go</span><span class="op">:</span> <span class="st">&#39;hai_after_l&#39;</span> }<span class="op">,</span>          <span class="co">// 没有 if = 兜底</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>] }<span class="op">,</span></span></code></pre></div>
+<p>没有 <code>text</code>
+的节点是”路由节点”，会直接跳走，玩家看不到。</p>
+<p><strong>顺序规则</strong>：<code>fx</code>
+在进入节点时立刻执行；其中的
+<code>scene</code>（信纸/过场）会等本节点的文字播完再弹出；<code>m:</code>（记忆过场）和
+<code>end</code>（结局）会等整段对话结束后再播放。</p>
+<h2 id="条件语法">2. 条件语法</h2>
+<table>
+<thead>
+<tr class="header">
+<th>写法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>f:名字</code></td>
+<td>旗标已设置</td>
+</tr>
+<tr class="even">
+<td><code>i:物品</code></td>
+<td>邮包里有这个物品</td>
+</tr>
+<tr class="odd">
+<td><code>m:记忆</code></td>
+<td>已想起这段记忆</td>
+</tr>
+<tr class="even">
+<td><code>d:信</code></td>
+<td>这封信已送达</td>
+</tr>
+<tr class="odd">
+<td><code>p:信</code></td>
+<td>这封信被偷看过</td>
+</tr>
+<tr class="even">
+<td><code>c:计数&gt;=3</code></td>
+<td>计数器比较，支持 <code>&gt;= &lt;= == &gt; &lt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>!</code></td>
+<td>取反，如 <code>!f:clock_fixed</code></td>
+</tr>
+<tr class="even">
+<td><code>&amp;</code></td>
+<td>并且</td>
+</tr>
+<tr class="odd">
+<td><code>\|</code></td>
+<td>或者（优先级低于 <code>&amp;</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>内置计数器：<code>delivered</code>（已送达数）、<code>memories</code>（记忆数）、<code>peek</code>（偷看数）、<code>kindness</code>。你也可以随便起新名字，比如
+<code>c:zc+1</code>，没用过的计数从 0 开始。</p>
+<h2 id="效果语法用-分隔">3. 效果语法（用 <code>;</code> 分隔）</h2>
+<table>
+<thead>
+<tr class="header">
+<th>写法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>f:名字</code> / <code>-f:名字</code></td>
+<td>设置 / 清除旗标</td>
+</tr>
+<tr class="even">
+<td><code>i:物品</code> / <code>-i:物品</code></td>
+<td>得到（会弹提示）/ 失去物品</td>
+</tr>
+<tr class="odd">
+<td><code>d:信</code></td>
+<td>送达这封信（计数+1、音效、提示）</td>
+</tr>
+<tr class="even">
+<td><code>m:记忆</code></td>
+<td>解锁记忆（对话结束后播放回忆过场）</td>
+</tr>
+<tr class="odd">
+<td><code>peek:信</code></td>
+<td>标记为偷看过</td>
+</tr>
+<tr class="even">
+<td><code>c:名字+1</code></td>
+<td>计数器加减</td>
+</tr>
+<tr class="odd">
+<td><code>scene:过场id</code></td>
+<td>弹出 <code>G.STORY.scenes</code> 里的过场</td>
+</tr>
+<tr class="even">
+<td><code>sfx:音效</code></td>
+<td><code>blip select confirm bump bark item letter memory bell</code></td>
+</tr>
+<tr class="odd">
+<td><code>toast:文字</code></td>
+<td>屏幕上方弹一句提示</td>
+</tr>
+<tr class="even">
+<td><code>bell</code></td>
+<td>钟楼敲钟（声音 + 画面波纹）</td>
+</tr>
+<tr class="odd">
+<td><code>end</code></td>
+<td>对话结束后进入结局判定</td>
+</tr>
+</tbody>
+</table>
+<h2 id="加一个新角色">4. 加一个新角色</h2>
+<p>在 <code>data/story-main.js</code> 的 <code>npcs</code>
+里加一项：</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fisherboy<span class="op">:</span> {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">name</span><span class="op">:</span> <span class="st">&#39;小海&#39;</span><span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">look</span><span class="op">:</span> { <span class="dt">kid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">hair</span><span class="op">:</span> <span class="st">&#39;#2b2118&#39;</span><span class="op">,</span> <span class="dt">style</span><span class="op">:</span> <span class="st">&#39;short&#39;</span><span class="op">,</span> <span class="dt">shirt</span><span class="op">:</span> <span class="st">&#39;#4f74a8&#39;</span><span class="op">,</span> <span class="dt">pants</span><span class="op">:</span> <span class="st">&#39;#3a3a44&#39;</span> }<span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">at</span><span class="op">:</span> [                                        <span class="co">// 站在哪儿：取第一个满足条件的</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">if</span><span class="op">:</span> <span class="st">&#39;f:storm&#39;</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">33</span><span class="op">,</span> <span class="dt">dir</span><span class="op">:</span> <span class="st">&#39;up&#39;</span> }<span class="op">,</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">x</span><span class="op">:</span> <span class="dv">14</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">35</span><span class="op">,</span> <span class="dt">dir</span><span class="op">:</span> <span class="st">&#39;down&#39;</span> }<span class="op">,</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span>                                           <span class="co">// 都不满足 = 不出现</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">talk</span><span class="op">:</span> [                                      <span class="co">// 对话入口：取第一个满足条件的</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">if</span><span class="op">:</span> <span class="st">&#39;d:hai&#39;</span><span class="op">,</span> <span class="dt">go</span><span class="op">:</span> <span class="st">&#39;boy_after&#39;</span> }<span class="op">,</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">go</span><span class="op">:</span> <span class="st">&#39;boy_first&#39;</span> }<span class="op">,</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span></span></code></pre></div>
+<p>外观参数：<code>skin hair shirt pants shoes</code>
+颜色；<code>style</code> 可选
+<code>short long bun pigtails bald</code>；开关
+<code>kid glasses blush cane</code>；颜色项
+<code>apron hat scarf beard</code>。</p>
+<p>然后在任一 story 文件里写
+<code>boy_first</code>、<code>boy_after</code>
+节点。坐标单位是格，可以打开 <code>docs/img/map.png</code> 对照（每格 16
+像素）。注意别站在树、水、建筑上——测试脚本会检查。</p>
+<h2 id="加一封信">5. 加一封信</h2>
+<p>在 <code>letters</code> 数组里加：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>{ <span class="dt">id</span><span class="op">:</span> <span class="st">&#39;boy&#39;</span><span class="op">,</span> <span class="dt">to</span><span class="op">:</span> <span class="st">&#39;渔具屋的小海&#39;</span><span class="op">,</span> <span class="dt">from</span><span class="op">:</span> <span class="st">&#39;……&#39;</span><span class="op">,</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">hints</span><span class="op">:</span> [ { <span class="dt">if</span><span class="op">:</span> <span class="st">&#39;d:boy&#39;</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> <span class="st">&#39;已送达。&#39;</span> }<span class="op">,</span> { <span class="dt">text</span><span class="op">:</span> <span class="st">&#39;渔具屋在码头西边。&#39;</span> } ]<span class="op">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">peekToast</span><span class="op">:</span> <span class="st">&#39;信里说……&#39;</span> }<span class="op">,</span></span></code></pre></div>
+<p>然后在 <code>scenes</code> 里加 <code>letter_boy</code>
+作为信的内容，用 <code>d:boy</code> 送达。</p>
+<blockquote>
+<p>主线目前写死”5
+封送满才能拆最后一封”。如果信的数量改了，需要同步修改：<code>js/ui.js</code>
+里的 <code>/5</code> 与
+<code>&gt;= 5</code>、<code>data/story-main.js</code> 里的
+<code>c:delivered&gt;=5</code>、<code>js/game.js</code> 里的
+<code>dayTint</code>。</p>
+</blockquote>
+<h2 id="加一段记忆-一个结局">6. 加一段记忆 / 一个结局</h2>
+<ul>
+<li>记忆：在 <code>memories</code> 数组里加
+<code>{ id, title, lines }</code>，用效果 <code>m:id</code> 解锁；终章
+<code>zhou_hub</code> 里给它配一个动作选项。</li>
+<li>结局：在 <code>G.STORY.endings</code> 里加一项
+<code>{ id, title, sub, if, lines }</code>。<strong>按顺序取第一个满足条件的</strong>，所以条件越严格的放越前面。<code>lines</code>
+里的元素可以是 <code>{ if, t }</code>，按条件显示。</li>
+<li>尾声：<code>G.STORY.epilogues</code>
+每组取第一个满足条件的段落。</li>
+</ul>
+<h2 id="改地图">7. 改地图</h2>
+<p><code>data/world.js</code> 的 <code>build(m)</code>
+用画刷画地图：</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>m<span class="op">.</span><span class="fu">fill</span>(<span class="st">&#39;g&#39;</span>)<span class="op">;</span>                 <span class="co">// 全部铺草</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>m<span class="op">.</span><span class="fu">rect</span>(x<span class="op">,</span> y<span class="op">,</span> w<span class="op">,</span> h<span class="op">,</span> <span class="st">&#39;w&#39;</span>)<span class="op">;</span>     <span class="co">// 画矩形</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>m<span class="op">.</span><span class="fu">set</span>(x<span class="op">,</span> y<span class="op">,</span> <span class="st">&#39;t&#39;</span>)<span class="op">;</span>            <span class="co">// 单格</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>m<span class="op">.</span><span class="fu">frame</span>(x<span class="op">,</span> y<span class="op">,</span> w<span class="op">,</span> h<span class="op">,</span> <span class="st">&#39;e&#39;</span>)<span class="op">;</span>    <span class="co">// 空心框（篱笆）</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>m<span class="op">.</span><span class="fu">scatter</span>(x<span class="op">,</span> y<span class="op">,</span> w<span class="op">,</span> h<span class="op">,</span> <span class="st">&#39;f&#39;</span><span class="op">,</span> <span class="fl">0.12</span><span class="op">,</span> <span class="st">&#39;h&#39;</span>)<span class="op">;</span>   <span class="co">// 在花坡草地上随机撒野花</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>m<span class="op">.</span><span class="fu">forest</span>(<span class="fl">0.09</span><span class="op">,</span> <span class="dv">7</span>)<span class="op">;</span>           <span class="co">// 随机种树（自动避开路、建筑、道具、角色）</span></span></code></pre></div>
+<p>地形字符：<code>g</code> 草地 <code>h</code> 花坡 <code>f</code> 野花
+<code>p</code> 土路 <code>o</code> 石板 <code>s</code> 沙滩
+<code>w</code> 水 <code>b</code> 桥 <code>k</code> 栈桥 <code>t</code>
+树 <code>u</code> 灌木 <code>e</code> 篱笆 <code>r</code> 礁石。</p>
+<p>建筑：<code>{ id, name, x, y, w, h, door, icon, roof, wall, awning, chimney }</code>，门在底边第
+<code>door</code> 列。门前对话的节点名是 <code>door_建筑id</code>。</p>
+<p>道具：<code>{ kind, x, y, solid, talk, if }</code>。<code>kind</code>
+见 <code>js/tiles.js</code> 的
+<code>prop()</code>：<code>mailbox sign board lamp bench crate barrel well boat easel crane gear photo dandelion gate stall bowl busstop flowerpot spark</code>。<code>talk</code>
+以 <code>pick_</code> 开头的道具，踩上去就会自动触发。</p>
+<h2 id="自测清单">8. 自测清单</h2>
+<ul>
+<li>浏览器控制台没有”找不到对话节点 / 未知条件 / 未知效果”的警告。</li>
+<li>每个新角色身边至少有一格能走到。</li>
+<li>新的道具/物品，在需要它的地方之前一定拿得到（避免卡关）。</li>
+<li>每个结局都至少走一遍。</li>
+</ul>
+<h1 id="部署指南发布到-github-pages">部署指南：发布到 GitHub Pages</h1>
+<p>游戏是纯静态文件，没有构建步骤。下面三种方式任选一种。</p>
+<h2 id="方式-a单独一个仓库推荐">方式 A：单独一个仓库（推荐）</h2>
+<ol type="1">
+<li><p>在 GitHub 新建仓库，比如 <code>afu-mail-route</code>。</p></li>
+<li><p>把整个 <code>afu-mail-route/</code>
+文件夹的内容推上去（<code>index.html</code> 要在仓库根目录）：</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> afu-mail-route</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init <span class="kw">&amp;&amp;</span> <span class="fu">git</span> add . <span class="kw">&amp;&amp;</span> <span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;阿福的最后一班邮路&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin git@github.com:你的用户名/afu-mail-route.git</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span></code></pre></div></li>
+<li><p>仓库 → <strong>Settings → Pages</strong> → Build and deployment
+选 <strong>Deploy from a branch</strong>，分支 <code>main</code>，目录
+<code>/ (root)</code>，保存。</p></li>
+<li><p>一两分钟后访问
+<code>https://你的用户名.github.io/afu-mail-route/</code>。</p></li>
+</ol>
+<p>仓库里已经带了 <code>.nojekyll</code>，GitHub 不会用 Jekyll
+处理这些文件。</p>
+<h2 id="方式-b用-github-actions-部署">方式 B：用 GitHub Actions
+部署</h2>
+<p>仓库里自带 <code>.github/workflows/pages.yml</code>。在
+<strong>Settings → Pages</strong> 里把 Source 改成 <strong>GitHub
+Actions</strong>，之后每次推送到 <code>main</code> 都会自动发布。</p>
+<h2 id="方式-c放进已有的个人站比如-jekyll-博客">方式
+C：放进已有的个人站（比如 Jekyll 博客）</h2>
+<p>把整个文件夹复制到站点仓库的一个子目录，例如 <code>game/</code>：</p>
+<pre><code>你的站点仓库/
+├── _config.yml
+├── game/            ← 整个 afu-mail-route 的内容
+│   ├── index.html
+│   ├── css/ js/ data/ docs/
+│   └── cover.png</code></pre>
+<p>访问
+<code>https://你的站点/game/</code>。所有路径都是相对路径，放在任何子目录都能用。</p>
+<p>Jekyll 站点需要注意： - 文件夹名不要以下划线开头（Jekyll 会忽略
+<code>_xxx</code> 目录）。 - 如果 <code>_config.yml</code> 里有
+<code>exclude</code> 规则，确认没有排除 <code>game/</code>。 -
+想在博客导航里加入口，链接到 <code>/game/</code>
+即可；想嵌进文章里可以用：
+<code>html   &lt;iframe src="/game/" style="width:100%;aspect-ratio:5/3;border:0" allow="fullscreen"&gt;&lt;/iframe&gt;</code></p>
+<h2 id="本地试玩">本地试玩</h2>
+<ul>
+<li><p>直接双击 <code>index.html</code> 就能玩（脚本不是 ES module，不受
+<code>file://</code> 限制）。</p></li>
+<li><p>或者起一个本地服务器：</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> http.server 8000</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 打开 http://localhost:8000</span></span></code></pre></div></li>
+</ul>
+<h2 id="自定义域名">自定义域名</h2>
+<p>在仓库根目录加一个 <code>CNAME</code> 文件写上域名，再到域名服务商把
+CNAME 记录指向 <code>你的用户名.github.io</code>。</p>
+<h2 id="分享卡片">分享卡片</h2>
+<p><code>index.html</code> 里已经写了
+<code>og:title</code>、<code>og:description</code>、<code>og:image</code>（<code>cover.png</code>）。部分平台要求
+<code>og:image</code> 是绝对地址，部署后可以改成
+<code>https://你的用户名.github.io/afu-mail-route/cover.png</code>。</p>
+<h2 id="常见问题">常见问题</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>现象</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>打开是 404</td>
+<td>等 1–2 分钟；确认 Pages 的分支和目录设置正确；确认
+<code>index.html</code> 在所选目录的根部</td>
+</tr>
+<tr class="even">
+<td>画面空白</td>
+<td>打开浏览器控制台看报错；常见原因是只上传了部分文件夹，<code>js/</code>、<code>data/</code>
+都要上传</td>
+</tr>
+<tr class="odd">
+<td>没有声音</td>
+<td>浏览器要求先有一次点击/按键才能出声；也可能按了 M 静音</td>
+</tr>
+<tr class="even">
+<td>想清空进度</td>
+<td>标题画面点”新的一天”；或浏览器控制台执行
+<code>localStorage.clear()</code>（结局收集也会清掉）</td>
+</tr>
+<tr class="odd">
+<td>手机上按钮太小</td>
+<td>横屏游玩；触屏按钮会随画面放大</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
