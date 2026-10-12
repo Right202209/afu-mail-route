@@ -177,3 +177,33 @@ button { font-family: inherit; cursor: pointer; }
   #stage { box-shadow: none; }
   footer { display: none; }
 }
+
+/* v1.2：目标、地图、设置 */
+#goal {
+  position: absolute; top: 2.3em; left: .5em; max-width: 58%;
+  background: rgba(30, 22, 16, .72); color: var(--paper); border: 2px solid #8a6b4a; border-radius: 4px;
+  padding: .2em .6em; font-size: .66em; line-height: 1.45; cursor: pointer; transition: border-color .3s, background .3s;
+}
+#goal b { color: var(--gold); }
+#goal.flash { border-color: var(--gold); background: rgba(92, 64, 36, .9); animation: goalpop .5s; }
+@keyframes goalpop { 30% { transform: translateX(4px); } }
+#mapview, #settings {
+  position: absolute; inset: 6% 8%; background: var(--paper); color: var(--ink);
+  border: 3px solid var(--ink); border-radius: 6px; box-shadow: 0 0 0 3px var(--paper-2), 0 8px 0 rgba(0,0,0,.4);
+  display: flex; flex-direction: column; overflow: hidden; animation: pop .14s ease-out;
+}
+#settings { inset: 10% 16%; }
+.map-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: .4em; background: #1d1612; min-height: 0; }
+#map-canvas { max-width: 100%; max-height: 100%; image-rendering: pixelated; border: 2px solid #3a2f26; }
+#map-legend { font-size: .62em; padding: .35em .7em; color: #5a4b3a; }
+#map-legend .dot { display: inline-block; width: .8em; height: .8em; border-radius: 50%; background: rgba(160,150,130,.8); vertical-align: -.1em; margin-right: .2em; }
+#map-legend .dot.me { background: #c0392b; }
+#map-legend .dot.new { background: #f2c14e; }
+#set-body { padding: .5em .8em; font-size: .72em; overflow-y: auto; }
+#set-body .opt { display: flex; justify-content: space-between; align-items: center; gap: .6em; padding: .3em .4em; border-radius: 3px; }
+#set-body .opt.sel { background: rgba(192, 96, 58, .14); }
+#set-body .vals button { background: transparent; border: 2px solid var(--paper-2); color: #7a6a55; border-radius: 3px; padding: .05em .55em; margin-left: .2em; font-size: 1em; }
+#set-body .vals button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+#set-body .keys { color: #9b8a73; margin-top: .8em; line-height: 1.6; }
+#t-run.on { background: var(--gold); color: var(--ink); }
+#abtns #t-run, #abtns #t-m { width: 2.4em; height: 2.4em; align-self: flex-end; font-size: .85em; }

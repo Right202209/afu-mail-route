@@ -34,6 +34,7 @@ G.dialogue = (function () {
     while (id && guard++ < 50) {
       node = N()[id];
       if (!node) { console.warn('找不到对话节点', id); return close(); }
+      (G.state.s.seen || (G.state.s.seen = {}))[id] = 1;
       handle(G.state.apply(node.fx));
       if (node.text && node.text.length) break;
       // 纯路由节点：没有文字，直接跳转
@@ -71,12 +72,14 @@ G.dialogue = (function () {
     shown = 0;
     G.$('#dlg-more').style.visibility = 'hidden';
     clearInterval(timer);
+    const delay = G.settings.textDelay();
+    if (delay <= 0) { el.textContent = txt; shown = txt.length; timer = null; pageDone(); return; }
     timer = setInterval(() => {
       shown++;
       el.textContent = txt.slice(0, shown);
       if (shown % 2 === 0 && node.who !== 'none') G.audio.play('blip');
       if (shown >= txt.length) { clearInterval(timer); timer = null; pageDone(); }
-    }, 28);
+    }, delay);
   }
   function pageDone() {
     if (page < pages.length - 1) { G.$('#dlg-more').style.visibility = 'visible'; return; }

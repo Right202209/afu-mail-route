@@ -86,7 +86,7 @@ G.ui = (function () {
     if (!m) return;
     G.audio.play('memory');
     await scene({ kind: 'sepia', title: m.title, lines: m.lines }, '记忆碎片 ' + (idx + 1) + ' / ' + S.memories.length);
-    toast('✦ 你想起了老周的一段往事（' + G.state.s.mems.length + '/6）');
+    toast('✦ 你想起了老周的一段往事（' + G.state.s.mems.length + '/' + S.memories.length + '）');
   }
 
   /* ---------- 头像 ---------- */
@@ -105,7 +105,7 @@ G.ui = (function () {
   function refresh() {
     const st = G.state.s;
     G.$('#hud-letters').textContent = '✉ ' + st.counters.delivered + '/5';
-    G.$('#hud-mem').textContent = '✦ ' + st.mems.length + '/6';
+    G.$('#hud-mem').textContent = '✦ ' + st.mems.length + '/' + S.memories.length;
     if (!G.$('#bag').classList.contains('hidden')) renderBag();
   }
 
@@ -130,6 +130,21 @@ G.ui = (function () {
         else if (done && l.id !== 'afu' && (st.peeked.includes(l.id) || done)) h += `<button data-read="${l.id}">再读一遍</button>`;
         h += '</div>';
       });
+      const qs = (S.quests || []).filter((q) => G.state.test(q.show));
+      if (qs.length) h += '<p style="margin:.8em 0 .3em;color:#9b8a73">— 委托 —</p>';
+      qs.forEach((q) => {
+        const hint = (q.hints.find((x) => G.state.test(x.if)) || {}).text || '';
+        const done = G.state.test(q.hints[0].if);
+        h += `<div class="card"><h3>${G.esc(q.title)} <span class="st${done ? ' done' : ''}">${done ? '完成' : '进行中'}</span></h3><p>${G.esc(hint)}</p></div>`;
+      });
+    } else if (bagTab === 'stamps') {
+      const got = G.STAMPS.filter((x) => st.flags['st_' + x.id]).length;
+      h += `<p style="color:#9b8a73;margin:0 0 .5em">栖湾风物 · 已收集 ${got} / ${G.STAMPS.length}</p><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5em">`;
+      G.STAMPS.forEach((x, i) => {
+        const have = st.flags['st_' + x.id];
+        h += have ? `<div class="card" style="margin:0"><h3>${i + 1}. ${G.esc(x.name)}</h3><p>${G.esc(x.desc)}</p></div>` : `<div class="card locked" style="margin:0"><h3>${i + 1}. ？？？</h3><p>还没找到。</p></div>`;
+      });
+      h += '</div>';
     } else if (bagTab === 'items') {
       if (!st.items.length) h = '<div class="empty">邮包里除了信，什么都没有。</div>';
       st.items.forEach((id) => { const it = S.items[id]; if (it) h += `<div class="card"><h3>${G.esc(it.name)}</h3><p>${G.esc(it.desc)}</p></div>`; });
@@ -155,8 +170,8 @@ G.ui = (function () {
     G.input.on((a) => {
       if (!bagOpen()) return false;
       if (a === 'bag' || a === 'back') closeBag();
-      const tabs = ['letters', 'items', 'memories'];
-      if (a === 'dir:right' || a === 'dir:left') { bagTab = tabs[(tabs.indexOf(bagTab) + (a === 'dir:right' ? 1 : 2)) % 3]; G.audio.play('select'); renderBag(); }
+      const tabs = ['letters', 'items', 'memories', 'stamps'];
+      if (a === 'dir:right' || a === 'dir:left') { bagTab = tabs[(tabs.indexOf(bagTab) + (a === 'dir:right' ? 1 : 3)) % 4]; G.audio.play('select'); renderBag(); }
       if (a === 'dir:down') G.$('#bag-body').scrollTop += 40;
       if (a === 'dir:up') G.$('#bag-body').scrollTop -= 40;
       if (a === 'act') { const b = G.$('#bag-body [data-open]'); if (b && bagTab === 'letters' && !G.state.s.flags.final_read) b.click(); }
@@ -177,7 +192,7 @@ G.ui = (function () {
     });
     const mins = Math.max(1, Math.round(st.played / 60));
     const found = G.state.meta().endings.length;
-    h += `<h4>邮 路 记 录</h4><div class="stats">送达 ${st.counters.delivered}/5 封信 · 想起 ${st.mems.length}/6 段往事 · 偷看 ${st.peeked.length} 封 · 用时约 ${mins} 分钟</div>`;
+    h += `<h4>邮 路 记 录</h4><div class="stats">送达 ${st.counters.delivered}/5 封信 · 想起 ${st.mems.length}/${S.memories.length} 段往事 · 邮票 ${st.counters.stamps || 0}/${G.STAMPS.length} · 偷看 ${st.peeked.length} 封 · 用时约 ${mins} 分钟</div>`;
     h += `<div class="stats">已解锁结局 ${found}/${S.endings.length}：${S.endings.map((x) => (G.state.meta().endings.includes(x.id) ? x.title : '？？')).join(' · ')}</div>`;
     h += `<h2 style="margin-top:2.5em">THE END</h2><div class="stats">谢谢你替老周，走完了这一班邮路。</div><button class="menu-btn" id="btn-again">再走一次邮路</button>`;
     sc.innerHTML = h;

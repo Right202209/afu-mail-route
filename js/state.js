@@ -6,7 +6,7 @@ G.state = (function () {
   let s = fresh();
 
   function fresh() {
-    return { flags: {}, items: [], counters: { delivered: 0, memories: 0, peek: 0, kindness: 0 }, mems: [], delivered: [], peeked: [], player: null, started: Date.now(), played: 0 };
+    return { flags: {}, items: [], counters: { delivered: 0, memories: 0, peek: 0, kindness: 0, stamps: 0 }, mems: [], delivered: [], peeked: [], player: null, started: Date.now(), played: 0, seen: {}, goal: null };
   }
 
   /* ---------- 条件 ---------- */
@@ -80,7 +80,7 @@ G.state = (function () {
 
   /* ---------- 存档 ---------- */
   function save(player) {
-    if (player) s.player = { x: player.tx, y: player.ty, dir: player.dir };
+    if (player) s.player = { x: player.tx, y: player.ty, dir: player.dir, map: G.map ? G.map.id : 'town' };
     try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* 隐私模式下忽略 */ }
   }
   function load() {

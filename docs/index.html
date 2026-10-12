@@ -100,15 +100,19 @@
 <li><a href="#阿福的最后一班邮路游戏设计文档">游戏设计文档</a>　2. <a
 href="#阿福的最后一班邮路故事线与攻略">故事线与攻略</a>（含剧透）　3. <a
 href="#剧本编写指南怎么改剧情加角色加结局">剧本编写指南</a>　4. <a
-href="#部署指南发布到-github-pages">部署指南</a></li>
+href="#部署指南发布到-github-pages">部署指南</a>　5. <a
+href="#版本路线图从-v1-到像素-rpg-里的-3a">版本路线图</a></li>
 </ol>
 </nav>
 <h1
 id="阿福的最后一班邮路游戏设计文档">《阿福的最后一班邮路》游戏设计文档</h1>
 <blockquote>
-<p>版本 1.0 · 2026-10-11 类型：俯视角像素剧情探索（2D RPG 式小镇漫步）
-平台：浏览器（桌面键盘 / 手机触屏），静态托管于 GitHub Pages
-时长：一周目约 25–40 分钟；全结局约 1.5–2 小时</p>
+<p>版本 1.2 ·
+2026-10-12（v1.1：灯塔岬、北林、四个室内、两条支线、两段记忆、12
+枚邮票；v1.2：小卖部和教室、漂流瓶与失物招领、起雾、体验打磨）
+类型：俯视角像素剧情探索（2D RPG 式小镇漫步） 平台：浏览器（桌面键盘 /
+手机触屏），静态托管于 GitHub Pages 时长：一周目约 30–60 分钟；全结局 +
+全收集约 2–3 小时</p>
 </blockquote>
 <figure>
 <img src="img/town.png" alt="小镇" />
@@ -149,17 +153,17 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 </tr>
 <tr class="odd">
 <td>一张横向长图，5 个区域并排</td>
-<td>60×44 格的完整小镇：河、海、广场、花坡</td>
+<td>80×44 格的小镇 + 北林 + 4 个可进入的室内</td>
 <td>能走出”邮路”的感觉，有远近、有捷径</td>
 </tr>
 <tr class="even">
 <td>NPC 是”不同时期的同一个人”，对话树只用来问答</td>
-<td>12 个各有故事的居民，对话会改变世界状态</td>
+<td>16 个各有故事的居民，对话会改变世界状态</td>
 <td>题目要求”丰富的故事线”</td>
 </tr>
 <tr class="odd">
 <td>计数”已交谈 x/12”</td>
-<td>计数”信件 x/5、记忆 x/6” + 4 个结局</td>
+<td>计数”信件 x/5、记忆 x/8”、12 枚邮票 + 4 个结局</td>
 <td>进度和情感目标绑在一起</td>
 </tr>
 <tr class="even">
@@ -227,10 +231,25 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 </tr>
 <tr class="even">
 <td>声音开关</td>
-<td>M</td>
+<td>P</td>
 <td>右上 ♪</td>
 </tr>
 <tr class="odd">
+<td>地图</td>
+<td>M</td>
+<td>右上“地图” / 触屏“图”</td>
+</tr>
+<tr class="even">
+<td>跑步</td>
+<td>按住 Shift（设置里可改成默认跑）</td>
+<td>触屏“跑”（切换）</td>
+</tr>
+<tr class="odd">
+<td>设置</td>
+<td>Esc</td>
+<td>右上 ⚙</td>
+</tr>
+<tr class="even">
 <td>全屏</td>
 <td>F</td>
 <td>—</td>
@@ -244,7 +263,7 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 <p>邮包里有 6 封信：5 封待送 + 1 封”阿福
 收”。每封信在邮包里显示收件人、寄件人和<strong>随进度变化的线索</strong>（例如林阿姨那封，会从”面包店在广场东边”逐步变为”去问问隔壁的钱叔”，再变为”她在东边车站”）。送完五封后，“阿福
 收”出现【拆开】按钮。</p>
-<h3 id="记忆碎片6-段">6.2 记忆碎片（6 段）</h3>
+<h3 id="记忆碎片8-段">6.2 记忆碎片（8 段）</h3>
 <table>
 <thead>
 <tr class="header">
@@ -284,6 +303,16 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 <td>路是走出来的</td>
 <td>把桥头那幅没画完的画交给阿木</td>
 </tr>
+<tr class="odd">
+<td>7</td>
+<td>台风夜的灯塔</td>
+<td>点亮灯塔后回去和唐伯说话（支线）</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>树洞先生</td>
+<td>把北林树洞里的纸条交给小吴（支线）</td>
+</tr>
 </tbody>
 </table>
 <p>记忆可以在邮包”记忆”页反复回看。</p>
@@ -309,7 +338,7 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 <tbody>
 <tr class="odd">
 <td>交班（完美）</td>
-<td>叫出名字 + 0 次偷看 + 6 段记忆全齐 + 五条支线都走到最好的分支</td>
+<td>叫出名字 + 0 次偷看 + 8 段记忆全齐 + 五条主线都走到最好的分支</td>
 </tr>
 <tr class="even">
 <td>拆开的信</td>
@@ -325,10 +354,69 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 </tr>
 </tbody>
 </table>
-<p>每个结局后有”后来”尾声：七个角色/地点各自按你的选择显示不同段落（共
-14
+<p>每个结局后有”后来”尾声：十个角色/地点各自按你的选择显示不同段落（共
+19
 段可能的尾声）。已解锁的结局记录在浏览器里，标题画面显示收集进度。</p>
-<h3 id="存档">6.5 存档</h3>
+<h3 id="支线与收集v1.1">6.5 支线与收集（v1.1）</h3>
+<ul>
+<li><strong>熄灭的灯</strong>：灯塔岬的唐伯腿伤爬不上灯塔。找到礁石里的钥匙、向钱叔要灯油，进灯塔点亮灯室。入夜后海面上有旋转的光束。</li>
+<li><strong>树洞邮局</strong>：北林老樟树的树洞里塞满孩子们的纸条，还有老周以”树洞先生”之名写的回信本。交给小吴，她决定接班。</li>
+<li><strong>邮票</strong>：12
+枚”栖湾风物”邮票散落在小镇、北林和室内，踩上去即可拾取；邮包”邮票”页查看。</li>
+<li>支线进度显示在邮包”信件”页底部的”委托”里。</li>
+</ul>
+<h3 id="体验打磨v1.2">6.6 体验打磨（v1.2）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>当前目标</td>
+<td>左上角显示一句话目标。哪条线刚有进展就自动切到哪条；点一下可以在进行中的线之间切换</td>
+</tr>
+<tr class="even">
+<td>“有新话”标记</td>
+<td>还有没听过的话的人，头顶冒“！”。第一次和每个阶段都提醒，听过就消失</td>
+</tr>
+<tr class="odd">
+<td>地图（M）</td>
+<td>当前地图缩略图：阿福的位置、谁有话要说、各区域名字；室内会显示小镇并标在门口</td>
+</tr>
+<tr class="even">
+<td>跑步</td>
+<td>按住 Shift 跑，速度约 1.7 倍，脚下扬尘；可设成默认跑</td>
+</tr>
+<tr class="odd">
+<td>设置（Esc）</td>
+<td>文字速度（慢/中/快/瞬间）、默认跑步、目标提示、“！”标记、天气效果；保存在本地</td>
+</tr>
+<tr class="even">
+<td>进门提示</td>
+<td>面对能进的门时提示“空格 · 进门”</td>
+</tr>
+<tr class="odd">
+<td>黄昏起雾</td>
+<td>送出 3 封信后起雾，灯塔点亮后雾散去大半</td>
+</tr>
+</tbody>
+</table>
+<figure>
+<img src="img/ux_map.png" alt="地图" />
+<figcaption aria-hidden="true">地图</figcaption>
+</figure>
+<figure>
+<img src="img/ux_goal.png" alt="当前目标与“！”标记" />
+<figcaption aria-hidden="true">当前目标与“！”标记</figcaption>
+</figure>
+<h3 id="存档">6.7 存档</h3>
 <p>每段对话结束自动存档到
 <code>localStorage</code>，标题画面出现”继续旅程”。结局后存档清除，但结局收集记录保留。</p>
 <h2 id="世界">7. 世界</h2>
@@ -336,8 +424,8 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 <img src="img/map.png" alt="地图" />
 <figcaption aria-hidden="true">地图</figcaption>
 </figure>
-<p>60×44 格（每格 16
-像素）。河从北向南把小镇分成东西两半，南边是海。</p>
+<p>小镇 80×44 格（每格 16
+像素）。河从北向南把小镇分成东西两半，南边是海，东边是灯塔岬。小学东边的小路通往北林（40×28）。邮局、钟楼、面包店、灯塔可以走进去（钟楼送信后开门，面包店和好后开门，灯塔要钥匙）。</p>
 <table>
 <thead>
 <tr class="header">
@@ -396,6 +484,26 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 <td>东滩</td>
 <td>东南</td>
 <td>礁石上的阿木</td>
+</tr>
+<tr class="odd">
+<td>灯塔岬</td>
+<td>最东</td>
+<td>红白灯塔、守灯人小屋、唐伯、礁石里的钥匙</td>
+</tr>
+<tr class="even">
+<td>西滩</td>
+<td>西南</td>
+<td>送出第一封信后，漂流瓶会被冲上沙滩</td>
+</tr>
+<tr class="odd">
+<td>车站</td>
+<td>东</td>
+<td>车站旁的失物招领箱</td>
+</tr>
+<tr class="even">
+<td>北林</td>
+<td>地图北端外</td>
+<td>分岔小路、池塘、蘑菇地、护林员阿兰、树洞空地</td>
 </tr>
 <tr class="odd">
 <td>河边</td>
@@ -484,6 +592,16 @@ game-cv，用 Phaser 把简历做成可以走动、对话的像素小镇）。</
 <td>疗养院护士</td>
 <td>守门人</td>
 </tr>
+<tr class="even">
+<td>唐伯</td>
+<td>灯塔岬的守灯人，腿伤</td>
+<td>支线「熄灭的灯」</td>
+</tr>
+<tr class="odd">
+<td>阿兰</td>
+<td>北林护林员</td>
+<td>支线「树洞邮局」的向导</td>
+</tr>
 </tbody>
 </table>
 <h2 id="美术与声音">9. 美术与声音</h2>
@@ -508,12 +626,17 @@ js/util.js            命名空间 G、随机数、描边、镜像
 js/audio.js           合成音效与背景乐
 js/sprites.js         角色精灵（阿福、人类生成器、猫、轮椅上的老周）
 js/tiles.js           地形、建筑、钟楼、道具绘制
-data/world.js         地图画刷、建筑、道具、区域
+data/world.js         小镇地图画刷、建筑、道具、区域
+data/world-more.js    北林、四个室内、12 枚邮票
 data/story-main.js    信件/物品/记忆/过场/角色登场 + 邮局与道具对话
 data/story-town.js    五条故事线 + 居民线索
 data/story-endings.js 疗养院、终章、结局、尾声
+data/story-v11.js     v1.1 支线、室内对话、新记忆与对旧剧情的补丁
+data/world-v12.js     小卖部、教室、漂流瓶与失物招领箱
+data/story-v12.js     v1.2 支线
+js/extras.js          设置、当前目标、地图
 js/state.js           旗标/物品/计数/记忆、条件与效果解释器、存档
-js/map.js             生成格子与碰撞，预渲染地面
+js/map.js             多地图：生成格子与碰撞，预渲染地面，传送口
 js/input.js           键盘、触屏、按优先级分发输入
 js/dialogue.js        对话引擎
 js/ui.js              HUD、提示、过场、邮包、结局字幕
@@ -522,8 +645,9 @@ js/game.js            主循环、移动、互动、镜头、昼夜、标题与�
 里的纯数据，条件和效果是短字符串（如
 <code>'d:chen &amp; !f:clock_fixed'</code>、<code>'i:gear;m:m_sea'</code>）。写剧本不需要碰引擎代码，详见《剧本编写指南》。</p>
 <p><strong>已验证</strong>：自动化测试（Playwright）走通了全部 4
-个结局；检查了所有对话跳转、场景、物品、记忆引用都存在；用广度优先搜索确认每个
-NPC、道具和门都能走到。</p>
+个结局（含 8 段记忆 + 12 枚邮票的完美路线）；检查了 214
+个对话节点的跳转、场景、物品、记忆引用；用跨地图广度优先搜索确认 6
+张地图、16 个角色、所有道具、邮票和门都能走到。</p>
 <h1
 id="阿福的最后一班邮路故事线与攻略">《阿福的最后一班邮路》故事线与攻略</h1>
 <blockquote>
@@ -699,6 +823,57 @@ id="阿福的最后一班邮路故事线与攻略">《阿福的最后一班邮�
 </tr>
 </tbody>
 </table>
+<figure>
+<img src="img/cape.png" alt="灯塔岬" />
+<figcaption aria-hidden="true">灯塔岬</figcaption>
+</figure>
+<h3 id="支线-灯塔岬熄灭的灯v1.1">支线 · 灯塔岬「熄灭的灯」（v1.1）</h3>
+<p>守灯人唐伯摔了腿，灯塔两个月没亮。今天傍晚”栖湾号”进港——正是载着海生的那条船。
+1. 和唐伯对话（小屋门口）→ 礁石那边出现<strong>灯塔钥匙</strong>； 2.
+钱叔送你一壶<strong>灯油</strong>（“灯亮了，我请他喝酒”）； 3.
+进灯塔，在灯室【用鼻子把油壶推到灯座边】→ 灯亮，入夜后海面有旋转光束；
+4. 回去找唐伯 →
+记忆⑦「台风夜的灯塔」：台风那年，是老周揣着还是小狗的阿福，爬了一百二十级台阶把灯点亮。
+灯塔里还有一箱旧报纸，每张都夹着”老唐，今天的报纸。——周”。
+<strong>尾声</strong>：点亮 →
+“栖湾号”准时进港，钱叔真的提着酒上了岬角。／没点亮 →
+船在雾里晚了一个钟头，好在还是到了。</p>
+<h3 id="支线-北林树洞邮局v1.1">支线 · 北林「树洞邮局」（v1.1）</h3>
+<p>北林老樟树的树洞，是镇上孩子们的秘密邮筒：写给去世的外婆、走丢的猫、十年后的自己。每个礼拜都有”树洞先生”回信——那是老周。他住院后，纸条越塞越多，十七封没人回。
+1.
+阿杰或护林员阿兰告诉你树洞的事（北林入口在小学东边小路的尽头；岔路口往右，再一直往左）；
+2. 在树洞拿到<strong>纸条和回信本</strong>； 3. 交给小吴 →
+她读到”狗会说话的，只是它们说的话，只有信得过的人才听得懂”，决定接班 →
+记忆⑧「树洞先生」。
+<strong>尾声</strong>：树洞里又开始有回信了，署名还是”树洞先生”，只是字迹圆了一些。</p>
+<figure>
+<img src="img/woods.png" alt="北林树洞空地" />
+<figcaption aria-hidden="true">北林树洞空地</figcaption>
+</figure>
+<h3 id="室内与收集v1.1">室内与收集（v1.1）</h3>
+<figure>
+<img src="img/post_in.png" alt="邮局里" />
+<figcaption aria-hidden="true">邮局里</figcaption>
+</figure>
+<ul>
+<li><strong>邮局里</strong>：分拣柜（最下面一格贴着”阿福”）、墙缝（四十年前的信从这里掉出来）、日历、老周的工作日志（一段时间线，能看到他的字越写越歪）、阿福的窝。</li>
+<li><strong>钟楼里</strong>（送信后开放）：缺一个齿轮的机芯；修好后会转。陈师傅的图纸，重逢后多了一张”五点，她来了”。</li>
+<li><strong>面包店里</strong>（和好后开放）：林阿姨在烤桂花卷；照片墙上空了二十年的相框会放进那张合影；货架上有一个画着狗的小面包，“给阿福”。</li>
+<li><strong>12
+枚邮票</strong>：邮局里、钟楼里、面包店里、灯塔里、大樟树下、栈桥、花坡东侧、东滩、车站旁、树洞旁、林中小池、老井旁。集齐后尾声多一段”邮票册”。</li>
+</ul>
+<h3 id="支线-西滩海那边的信v1.2">支线 · 西滩「海那边的信」（v1.2）</h3>
+<p>送出第一封信后，西滩会冲上来一个漂流瓶。信是雾岛九岁的阿汐写的：“以前晚上能看见你们那边的灯塔，最近看不见了。”
+1. 捡起漂流瓶； 2.
+送完小雨的信后，把瓶子交给她，她会写回信（“我们这儿也有一只会送信的狗”）；
+3. 把回信瓶交给码头的老海，他把瓶子扔进很远的浪里。
+<strong>尾声</strong>：一个月后，渔船捎来阿汐的回信；如果灯塔也点亮了，她会说“灯塔又亮了！”。这也是
+v2「雾海群岛」的伏笔。</p>
+<h3 id="支线-车站失物招领v1.2">支线 · 车站「失物招领」（v1.2）</h3>
+<p>车站旁的失物招领箱写着“周守信 代管”，里面有三样东西和老周的纸条： -
+小运动鞋 → “广场上跑得最快的孩子” → 阿杰 - 老花镜 → “井边看报总眯眼的人”
+→ 刘奶奶 - 挂铃铛的钥匙 → “总说自己什么都没丢的那位” → 钱叔
+全部物归原主后，尾声里的木牌会换成“阿福 代管”。</p>
 <h3 id="煤球的诱惑">煤球的诱惑</h3>
 <p>煤球可以让你偷看任何一封还没送出的信（弹出全文 +
 一句线索）。看小雨那封时它自己都会说：“这一封，我们不该看的。”</p>
@@ -755,6 +930,16 @@ id="阿福的最后一班邮路故事线与攻略">《阿福的最后一班邮�
 <td>把《邮路》放在他膝上（没拿画就绕轮椅走两圈）</td>
 <td>“旁边一直有只狗。一直都有。”</td>
 </tr>
+<tr class="odd">
+<td>⑦ 台风夜的灯塔</td>
+<td>对着窗外的灯塔轻轻叫一声</td>
+<td>“它一路都没叫。乖得很。”</td>
+</tr>
+<tr class="even">
+<td>⑧ 树洞先生</td>
+<td>把一片樟树叶放在他手心</td>
+<td>“……我好像，听得懂。”</td>
+</tr>
 </tbody>
 </table>
 <p>做满 5 个 → “阿……福。你是阿福。有福气的福。”
@@ -776,8 +961,8 @@ id="阿福的最后一班邮路故事线与攻略">《阿福的最后一班邮�
 <tbody>
 <tr class="odd">
 <td><strong>交班</strong>（完美）</td>
-<td>叫出名字；没偷看过；6
-段记忆；老海【等】、林阿姨【合影】、小雨【见习邮差】、钟楼重逢、阿木【赶车】</td>
+<td>叫出名字；没偷看过；8
+段记忆（含两条支线）；老海【等】、林阿姨【合影】、小雨【见习邮差】、钟楼重逢、阿木【赶车】</td>
 <td>“明天开始，栖湾的邮路，就交给你们了。我们下班吧。”</td>
 </tr>
 <tr class="even">
@@ -808,6 +993,10 @@ id="阿福的最后一班邮路故事线与攻略">《阿福的最后一班邮�
 <li>钟楼：陈师傅【叼信】→ 再对话【齿轮】→ 钟响 →
 和钟楼下的苏婆婆对话。</li>
 <li>桥头画架【叼走】→ 东滩：阿木【信】→【画】。</li>
+<li>灯塔岬：唐伯 → 礁石捡钥匙 → 钱叔要灯油 → 灯塔顶点灯 →
+回去找唐伯。</li>
+<li>广场阿杰 → 北林树洞拿纸条 → 回邮局交给小吴。</li>
+<li>（可选）沿途捡齐 12 枚邮票。</li>
 <li>邮包里拆开”阿福 收” → 白房子：何护士 → 老周：依次做 5
 个记忆动作。</li>
 <li>全程不要让煤球拆信。</li>
@@ -838,19 +1027,27 @@ id="剧本编写指南怎么改剧情加角色加结局">剧本编写指南：�
 <tbody>
 <tr class="odd">
 <td><code>data/world.js</code></td>
-<td>地图、建筑、道具、区域名</td>
+<td>小镇地图、建筑、道具、区域名</td>
 </tr>
 <tr class="even">
+<td><code>data/world-more.js</code></td>
+<td>北林、室内地图、邮票</td>
+</tr>
+<tr class="odd">
 <td><code>data/story-main.js</code></td>
 <td>物品、信件、记忆、过场文字、<strong>角色登场表</strong>，邮局和道具的对话</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>data/story-town.js</code></td>
 <td>五条故事线和居民的对话</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>data/story-endings.js</code></td>
 <td>疗养院、终章、结局、尾声</td>
+</tr>
+<tr class="even">
+<td><code>data/story-v11.js</code></td>
+<td>v1.1 扩展；也示范了怎么用”补丁”方式往旧剧情里插入新分支</td>
 </tr>
 </tbody>
 </table>
@@ -1056,7 +1253,23 @@ id="剧本编写指南怎么改剧情加角色加结局">剧本编写指南：�
 见 <code>js/tiles.js</code> 的
 <code>prop()</code>：<code>mailbox sign board lamp bench crate barrel well boat easel crane gear photo dandelion gate stall bowl busstop flowerpot spark</code>。<code>talk</code>
 以 <code>pick_</code> 开头的道具，踩上去就会自动触发。</p>
-<h2 id="自测清单">8. 自测清单</h2>
+<h2 id="加一张新地图-室内v1.1">8. 加一张新地图 / 室内（v1.1）</h2>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode js"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>G<span class="op">.</span><span class="at">MAPS</span><span class="op">.</span><span class="at">school_in</span> <span class="op">=</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">id</span><span class="op">:</span> <span class="st">&#39;school_in&#39;</span><span class="op">,</span> <span class="dt">name</span><span class="op">:</span> <span class="st">&#39;教室&#39;</span><span class="op">,</span> <span class="dt">indoor</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">w</span><span class="op">:</span> <span class="dv">12</span><span class="op">,</span> <span class="dt">h</span><span class="op">:</span> <span class="dv">8</span><span class="op">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">palette</span><span class="op">:</span> { <span class="dt">wall</span><span class="op">:</span> <span class="st">&#39;#e0d8c0&#39;</span><span class="op">,</span> <span class="dt">wallD</span><span class="op">:</span> <span class="st">&#39;#c0b898&#39;</span><span class="op">,</span> <span class="dt">trim</span><span class="op">:</span> <span class="st">&#39;#5c3d22&#39;</span> }<span class="op">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">build</span>(m) { m<span class="op">.</span><span class="fu">fill</span>(<span class="st">&#39;W&#39;</span>)<span class="op">;</span> m<span class="op">.</span><span class="fu">rect</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="st">&#39;F&#39;</span>)<span class="op">;</span> m<span class="op">.</span><span class="fu">set</span>(<span class="dv">6</span><span class="op">,</span> <span class="dv">7</span><span class="op">,</span> <span class="st">&#39;M&#39;</span>)<span class="op">;</span> }<span class="op">,</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">warps</span><span class="op">:</span> [{ <span class="dt">x</span><span class="op">:</span> <span class="dv">6</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">7</span><span class="op">,</span> <span class="dt">to</span><span class="op">:</span> <span class="st">&#39;town&#39;</span><span class="op">,</span> <span class="dt">tx</span><span class="op">:</span> <span class="dv">9</span><span class="op">,</span> <span class="dt">ty</span><span class="op">:</span> <span class="dv">13</span><span class="op">,</span> <span class="dt">dir</span><span class="op">:</span> <span class="st">&#39;down&#39;</span> }]<span class="op">,</span>   <span class="co">// 踩门垫回小镇</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">buildings</span><span class="op">:</span> []<span class="op">,</span> <span class="dt">props</span><span class="op">:</span> []<span class="op">,</span> <span class="dt">areas</span><span class="op">:</span> []<span class="op">,</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>再给小镇里的建筑加
+<code>enter: { to: 'school_in', x: 6, y: 6, dir: 'up' }</code>，需要条件才能进就加
+<code>lock: '条件'</code>（锁着时显示 <code>door_建筑id_locked</code>
+节点）。角色放进室内：<code>at</code> 里写
+<code>map: 'school_in'</code>。室内字符：<code>W</code> 墙
+<code>F</code> 木地板 <code>K</code> 石地板 <code>T</code> 瓷砖
+<code>M</code> 门垫。</p>
+<h2 id="自测清单">9. 自测清单</h2>
 <ul>
 <li>浏览器控制台没有”找不到对话节点 / 未知条件 / 未知效果”的警告。</li>
 <li>每个新角色身边至少有一格能走到。</li>
@@ -1070,12 +1283,12 @@ id="剧本编写指南怎么改剧情加角色加结局">剧本编写指南：�
 <li><p>在 GitHub 新建仓库，比如 <code>afu-mail-route</code>。</p></li>
 <li><p>把整个 <code>afu-mail-route/</code>
 文件夹的内容推上去（<code>index.html</code> 要在仓库根目录）：</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> afu-mail-route</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init <span class="kw">&amp;&amp;</span> <span class="fu">git</span> add . <span class="kw">&amp;&amp;</span> <span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;阿福的最后一班邮路&quot;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin git@github.com:你的用户名/afu-mail-route.git</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span></code></pre></div></li>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> afu-mail-route</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init <span class="kw">&amp;&amp;</span> <span class="fu">git</span> add . <span class="kw">&amp;&amp;</span> <span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;阿福的最后一班邮路&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin git@github.com:你的用户名/afu-mail-route.git</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span></code></pre></div></li>
 <li><p>仓库 → <strong>Settings → Pages</strong> → Build and deployment
 选 <strong>Deploy from a branch</strong>，分支 <code>main</code>，目录
 <code>/ (root)</code>，保存。</p></li>
@@ -1111,9 +1324,9 @@ C：放进已有的个人站（比如 Jekyll 博客）</h2>
 <li><p>直接双击 <code>index.html</code> 就能玩（脚本不是 ES module，不受
 <code>file://</code> 限制）。</p></li>
 <li><p>或者起一个本地服务器：</p>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> http.server 8000</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 打开 http://localhost:8000</span></span></code></pre></div></li>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> http.server 8000</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 打开 http://localhost:8000</span></span></code></pre></div></li>
 </ul>
 <h2 id="自定义域名">自定义域名</h2>
 <p>在仓库根目录加一个 <code>CNAME</code> 文件写上域名，再到域名服务商把
@@ -1148,7 +1361,7 @@ CNAME 记录指向 <code>你的用户名.github.io</code>。</p>
 </tr>
 <tr class="odd">
 <td>没有声音</td>
-<td>浏览器要求先有一次点击/按键才能出声；也可能按了 M 静音</td>
+<td>浏览器要求先有一次点击/按键才能出声；也可能按了 P 静音</td>
 </tr>
 <tr class="even">
 <td>想清空进度</td>
@@ -1158,6 +1371,331 @@ CNAME 记录指向 <code>你的用户名.github.io</code>。</p>
 <tr class="odd">
 <td>手机上按钮太小</td>
 <td>横屏游玩；触屏按钮会随画面放大</td>
+</tr>
+</tbody>
+</table>
+<h1 id="版本路线图从-v1-到像素-rpg-里的-3a">版本路线图：从 v1 到”像素
+RPG 里的 3A”</h1>
+<blockquote>
+<p>写于 2026-10-12。v1.1 已完成；v2、v3
+是规划，按”每一版都能独立发布、都能玩”来拆。</p>
+</blockquote>
+<h2 id="总原则">总原则</h2>
+<ol type="1">
+<li><strong>每一版都能上线。</strong>
+每个版本结束时都是一个完整、可通关、可部署到 GitHub Pages
+的游戏，不做”半成品大版本”。</li>
+<li><strong>故事先行。</strong>
+地图和系统都为故事服务。新区域必须带着新的人和新的心结进来。</li>
+<li><strong>数据驱动到底。</strong> 剧情、地图、角色、任务都在
+<code>data/</code> 里，引擎只做”怎么演”。这条从 v1 一直保留到
+v3，它决定了后面能不能多人协作。</li>
+<li><strong>狗不说话。</strong>
+不管世界多大，主角永远用动作回应世界。这是本作的”签名”。</li>
+</ol>
+<hr />
+<h2 id="v1.x-把栖湾镇做满进行中">v1.x · 把栖湾镇做满（进行中）</h2>
+<h3 id="v1.1-已完成本次">v1.1 已完成（本次）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>类别</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>引擎</td>
+<td>多地图系统：室内、地图边缘传送、进门/出门淡入淡出；门可以带”上锁条件”；存档记录所在地图</td>
+</tr>
+<tr class="even">
+<td>地图</td>
+<td>小镇从 60×44 扩到
+80×44：东边新增<strong>灯塔岬</strong>（灯塔、守灯人小屋、礁石海岸）；北边新增<strong>北林</strong>（40×28，分岔小路、池塘、蘑菇地、护林员小屋、树洞空地）</td>
+</tr>
+<tr class="odd">
+<td>室内</td>
+<td>邮局（分拣柜、墙缝、日历、工作日志、阿福的窝）、钟楼（齿轮机芯、图纸）、面包店（烤箱、照片墙，和好后林阿姨在店里）、灯塔（旋梯、灯室、窗景）</td>
+</tr>
+<tr class="even">
+<td>剧情</td>
+<td>支线「熄灭的灯」（唐伯、钥匙、灯油、点亮灯塔、夜里的光束）；支线「树洞邮局」（阿杰、阿兰、树洞先生的回信本、小吴接班）；老周的工作日志</td>
+</tr>
+<tr class="odd">
+<td>记忆</td>
+<td>6 → 8 段（新增「台风夜的灯塔」「树洞先生」），终章多两个动作</td>
+</tr>
+<tr class="even">
+<td>收集</td>
+<td>12 枚「栖湾风物」邮票，邮包新增”邮票”页；集齐有专属尾声</td>
+</tr>
+<tr class="odd">
+<td>角色</td>
+<td>12 → 16 位（唐伯、阿兰；林阿姨、小吴新增行为）</td>
+</tr>
+<tr class="even">
+<td>结局</td>
+<td>完美结局「交班」改为需要 8 段记忆；尾声 14 → 19 段</td>
+</tr>
+</tbody>
+</table>
+<h3 id="v1.2-已完成2026-10-12">v1.2 已完成（2026-10-12）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>类别</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>体验</td>
+<td>当前目标提示（自动跟进、点击切换）、地图（M）、按 Shift
+跑步并扬尘、设置面板（文字速度、默认跑步、提示开关、天气开关）、“有新话”的“！”标记、“进门”提示、触屏“跑”“图”按钮</td>
+</tr>
+<tr class="even">
+<td>内容</td>
+<td>新增钱记小卖部、小学教室两个室内；新增「海那边的信」（漂流瓶，埋下雾岛伏笔）和「失物招领」两条支线；黄昏起雾，灯塔点亮后雾散</td>
+</tr>
+<tr class="odd">
+<td>规模</td>
+<td>233 个对话节点，8 张地图，4 条支线，尾声 21 段</td>
+</tr>
+</tbody>
+</table>
+<h3 id="v1.2-原计划中还没做的移到-v1.3">v1.2 原计划中还没做的（移到
+v1.3）</h3>
+<ul>
+<li><strong>夜晚细节</strong>：窗户亮灯、萤火虫、雨。</li>
+<li>苏婆婆的小屋、渔具屋、白房子走廊等室内。</li>
+<li><strong>小游戏</strong>：叼信赛跑（限时在小巷里送达）、码头接飞盘、广场上和阿杰比赛跑步。</li>
+<li><strong>无障碍</strong>：字号调节、打字速度、色弱友好的高亮、全程可只用鼠标/触屏。</li>
+<li><strong>繁中 / 英文</strong>：文本已集中在
+<code>data/</code>，加一层 <code>lang</code> 映射即可。</li>
+</ul>
+<h3 id="v1.3-计划续">v1.3 计划（续）</h3>
+<ul>
+<li><strong>第二天（后日谈章节）</strong>：结局之后可以继续在镇上走，看到尾声里的变化（钟楼长椅上的两个老人、小雨的见习邮差帽）。</li>
+<li>成就面板、结局图鉴、记忆回放画廊。</li>
+</ul>
+<hr />
+<h2 id="v2-扩大世界观雾海群岛">v2 · 扩大世界观：「雾海群岛」</h2>
+<h3 id="世界设定">世界设定</h3>
+<p>栖湾只是<strong>雾海群岛</strong>里的一座小镇。群岛之间靠一条老旧的<strong>邮船航线</strong>相连，岛与岛之间常年有雾——人们说，雾是没送到的话变的。邮差是群岛上最受尊重的职业之一：他们把话从一座岛带到另一座岛，让雾散开一点。</p>
+<p>老周年轻时，是这条航线上最年轻的邮船水手。他后来留在栖湾，原因是一个他从未说出口的故事。</p>
+<h3 id="结构">结构</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>元素</th>
+<th>设计</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>区域</td>
+<td>4
+座岛，每座一个主题与一位”收信人群像”：<strong>栖湾</strong>（离别与重逢）、<strong>盐田岛</strong>（劳作与离乡）、<strong>钟鸣城</strong>（群岛首府，规则与人情）、<strong>无名礁</strong>（被遗忘的人）</td>
+</tr>
+<tr class="even">
+<td>交通</td>
+<td>邮船”信鸥号”，按航班表往返；错过就要等下一班——时间本身成为玩法</td>
+</tr>
+<tr class="odd">
+<td>主线</td>
+<td>阿福和小吴（见习邮差小雨同行）沿着老周年轻时的航线，把他珍藏的一叠<strong>没寄出的信</strong>送回各岛，拼出老周的过去</td>
+</tr>
+<tr class="even">
+<td>新系统</td>
+<td><strong>邮路规划</strong>：每天的信件、航班和天气组合成一张路线图；<strong>口碑</strong>：每座岛对”栖湾邮局”的信任度，影响能接到哪些信；<strong>雾</strong>：没送到的信让雾变浓，送到后雾散，地图视野随之变化</td>
+</tr>
+<tr class="odd">
+<td>伙伴</td>
+<td>小吴（会读信、会写回信）、小雨（认路、能进小孩才进得去的地方）、煤球（会开锁，但总想偷看信）</td>
+</tr>
+<tr class="even">
+<td>表现</td>
+<td>章节制，每座岛一个章节（约 1–1.5 小时），总时长 6–8 小时</td>
+</tr>
+<tr class="odd">
+<td>技术</td>
+<td>继续零依赖；地图改用 Tiled 编辑器导出
+JSON（保留代码画刷作为补充）；对话改用可视化编辑器（Twine/Ink
+风格导入）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="里程碑">里程碑</h3>
+<ol type="1">
+<li>世界观圣经（地理、历史、邮政制度、方言、节日）</li>
+<li>引擎：多区域加载、航班/时间系统、伙伴跟随</li>
+<li>盐田岛章节（可独立发布的 v2.0）</li>
+<li>钟鸣城、无名礁章节（v2.1、v2.2）</li>
+<li>老周的过去——终章（v2.3）</li>
+</ol>
+<hr />
+<h2 id="v3-目标像素-rpg-里的3a">v3 · 目标：像素 RPG 里的”3A”</h2>
+<p>“3A”在独立像素游戏里不是指预算，而是指<strong>完成度</strong>：美术、音乐、叙事、系统、打磨，每一项都做到同类作品的上游。对标作品：《去月球》（叙事）、《星露谷物语》（生活感与系统深度）、《八方旅人》（HD-2D
+视觉）、《风来之国》（像素美术与氛围）、《Undertale》（选择的分量）。</p>
+<h3 id="要做到的事">要做到的事</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>v3 目标</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>美术</td>
+<td>手绘像素：32×32 角色，每人 8 方向行走 +
+表情动画；地图分层、视差、动态光照（HD-2D 风格：像素精灵 +
+实时光影、景深）</td>
+</tr>
+<tr class="even">
+<td>音乐</td>
+<td>原创配乐 20–30
+首，每座岛一个主题，昼夜/天气变奏；环境声（海浪、钟声、集市）</td>
+</tr>
+<tr class="odd">
+<td>叙事</td>
+<td>主线 15–20 小时；每个有名字的 NPC
+都有日程表和自己的故事；选择影响多章节后的世界</td>
+</tr>
+<tr class="even">
+<td>系统</td>
+<td>邮路规划 + 生活模拟（天气、季节、节日）+
+轻度解谜；无战斗或极轻量冲突，保持本作温柔的调性</td>
+</tr>
+<tr class="odd">
+<td>演出</td>
+<td>关键剧情的过场动画、镜头运动、全屏插画</td>
+</tr>
+<tr class="even">
+<td>本地化</td>
+<td>简中 / 繁中 / 英 / 日</td>
+</tr>
+<tr class="odd">
+<td>平台</td>
+<td>Web 免费序章 + Steam / Switch 完整版</td>
+</tr>
+</tbody>
+</table>
+<h3 id="坦白说要多少资源">坦白说要多少资源</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>项目</th>
+<th>估计</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>团队</td>
+<td>核心 4–6 人：编剧/策划、程序、像素美术
+×2、作曲/音效；外包动画、本地化、测试</td>
+</tr>
+<tr class="even">
+<td>周期</td>
+<td>2–3 年</td>
+</tr>
+<tr class="odd">
+<td>技术</td>
+<td>迁移到 <strong>Godot 4</strong>（开源、2D 能力强、可导出
+Web/桌面/主机），把 v1/v2 的 <code>data/</code>
+剧本格式写成导入器，剧情资产直接复用</td>
+</tr>
+<tr class="even">
+<td>资金路径</td>
+<td>v1/v2 免费网页版积累玩家 → 制作可玩 Demo → Steam 愿望单 / 众筹 /
+独立游戏发行商</td>
+</tr>
+</tbody>
+</table>
+<h3 id="v3-的第一步现在就能开始">v3 的第一步（现在就能开始）</h3>
+<ol type="1">
+<li><strong>美术定调</strong>：用 v1 的小镇做一张 32×32
+手绘像素的”概念截图”，确定配色与光影。</li>
+<li><strong>原型迁移</strong>：在 Godot 4
+里做一个只有邮局门口和一条街的垂直切片，读取现在的
+<code>data/story-*.js</code> 剧本。</li>
+<li><strong>配乐样本</strong>：栖湾主题曲一首，白天/黄昏两个版本。</li>
+<li><strong>写作</strong>：完成 v2 世界观圣经，它就是 v3
+的剧本地基。</li>
+</ol>
+<hr />
+<h2 id="版本对照">版本对照</h2>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>v1.1（现在）</th>
+<th>v2（群岛）</th>
+<th>v3（完整版）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>地图</td>
+<td>1 镇 + 北林 + 4 室内</td>
+<td>4 岛 + 航线</td>
+<td>4–6 岛，季节变化</td>
+</tr>
+<tr class="even">
+<td>时长</td>
+<td>30–60 分钟</td>
+<td>6–8 小时</td>
+<td>15–20 小时</td>
+</tr>
+<tr class="odd">
+<td>角色</td>
+<td>16</td>
+<td>50+</td>
+<td>100+，带日程</td>
+</tr>
+<tr class="even">
+<td>美术</td>
+<td>代码生成 16px</td>
+<td>代码 + 少量手绘</td>
+<td>全手绘 32px + 动态光照</td>
+</tr>
+<tr class="odd">
+<td>音乐</td>
+<td>合成循环 1 首</td>
+<td>每岛 1 首</td>
+<td>原创 20–30 首</td>
+</tr>
+<tr class="even">
+<td>引擎</td>
+<td>原生 Canvas</td>
+<td>原生 Canvas</td>
+<td>Godot 4</td>
+</tr>
+<tr class="odd">
+<td>平台</td>
+<td>GitHub Pages</td>
+<td>GitHub Pages</td>
+<td>Web 序章 + Steam/Switch</td>
 </tr>
 </tbody>
 </table>

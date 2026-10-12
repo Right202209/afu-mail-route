@@ -1,10 +1,11 @@
 /* 地形、建筑与道具的像素绘制。地图字符的含义见 data/world.js 顶部注释。 */
 G.tiles = (function () {
   const T = 16;
+  const api = { palette: null };
   const px = (c, col, x, y, w, h) => { c.fillStyle = col; c.fillRect(x, y, w || 1, h || 1); };
   const H = G.hash;
 
-  const WALK = { g: 1, h: 1, p: 1, o: 1, s: 1, b: 1, k: 1, f: 1, d: 1 };
+  const WALK = { g: 1, h: 1, p: 1, o: 1, s: 1, b: 1, k: 1, f: 1, d: 1, F: 1, K: 1, T: 1, M: 1 };
   const isWalk = (ch) => !!WALK[ch];
 
   const COL = {
@@ -68,6 +69,36 @@ G.tiles = (function () {
         return;
       }
       case 'w': return; // 水面每帧单独画
+      /* ---- 室内 ---- */
+      case 'W': {
+        const P = api.palette || { wall: '#c9b48a', wallD: '#a8915f', trim: '#5c3d22' };
+        if (at(tx, ty + 1, 'FKTM')) {
+          px(c, P.wall, x, y, T, T);
+          for (let i = 0; i < T; i += 4) px(c, P.wallD, x + i + 1, y, 1, 10);
+          px(c, P.trim, x, y + 10, T, 2); px(c, P.wallD, x, y + 12, T, 3); px(c, '#2b2118', x, y + 15, T, 1);
+        } else {
+          px(c, '#2b2118', x, y, T, T); px(c, '#3a2f26', x + 1, y + 1, T - 2, T - 2);
+        }
+        return;
+      }
+      case 'F': case 'M': {
+        px(c, '#b5834f', x, y, T, T);
+        for (let i = 0; i < 4; i++) { px(c, '#9a6c3c', x, y + i * 4 + 3, T, 1); px(c, '#9a6c3c', x + ((ty + i) % 2 ? 5 : 11), y + i * 4, 1, 3); }
+        px(c, '#c9965f', x + 2, y + 1, 3, 1);
+        if (at(tx, ty - 1, 'W')) px(c, 'rgba(0,0,0,.18)', x, y, T, 3);
+        if (ch === 'M') { px(c, '#7a3a2c', x + 1, y + 2, 14, 12); px(c, '#a8553a', x + 2, y + 3, 12, 10); px(c, '#f2c14e', x + 4, y + 7, 8, 1); }
+        return;
+      }
+      case 'K': {
+        px(c, '#a39c8d', x, y, T, T); px(c, '#8f887a', x, y + 7, T, 1); px(c, '#8f887a', x + (ty % 2 ? 4 : 10), y, 1, 7); px(c, '#8f887a', x + (ty % 2 ? 12 : 2), y + 8, 1, 8);
+        if (at(tx, ty - 1, 'W')) px(c, 'rgba(0,0,0,.2)', x, y, T, 3);
+        return;
+      }
+      case 'T': {
+        px(c, '#f0e6d2', x, y, T, T); px(c, '#d9c8a8', x + 7, y, 1, T); px(c, '#d9c8a8', x, y + 7, T, 1); if ((tx + ty) % 2) px(c, '#e6d6b8', x, y, 7, 7), px(c, '#e6d6b8', x + 8, y + 8, 8, 8);
+        if (at(tx, ty - 1, 'W')) px(c, 'rgba(0,0,0,.18)', x, y, T, 3);
+        return;
+      }
       case 'b': case 'k': {
         // 桥（横向木板）/ 栈桥（纵向木板）——下面先垫水
         px(c, '#3d6f9e', x, y, T, T);
@@ -210,6 +241,24 @@ G.tiles = (function () {
     px(c, '#2b2118', cx - 5, y + 48, 10, 12); px(c, '#f2c14e', cx - 2, y + 51, 4, 5);
     px(c, '#5c3d22', cx - 7, y + h - 18, 14, 18); px(c, '#6e4524', cx - 6, y + h - 17, 12, 17); px(c, '#f2c14e', cx + 3, y + h - 9, 1, 2);
   }
+  function lighthouse(c, b) {
+    const x = b.x * T, y = b.y * T, w = b.w * T, h = b.h * T;
+    px(c, 'rgba(0,0,0,.2)', x + 3, y + h - 2, w - 2, 3);
+    // 塔身：下宽上窄，红白条纹
+    for (let yy = 16; yy < h; yy++) {
+      const inset = Math.round(10 - (yy - 16) / (h - 16) * 6);
+      const band = Math.floor((yy - 16) / 10) % 2;
+      px(c, band ? '#c0392b' : '#f6f6f0', x + inset, y + yy, w - inset * 2, 1);
+      px(c, 'rgba(0,0,0,.12)', x + w - inset - 3, y + yy, 3, 1);
+    }
+    // 灯室与顶
+    px(c, '#2b2118', x + 9, y + 6, w - 18, 11); px(c, '#f6d36b', x + 11, y + 8, w - 22, 7);
+    px(c, '#2b2118', x + 7, y + 16, w - 14, 2);
+    px(c, '#c0392b', x + 10, y + 1, w - 20, 5); px(c, '#2b2118', x + w / 2 - 1, y - 2, 2, 3);
+    // 门与窗
+    px(c, '#5c3d22', x + w / 2 - 5, y + h - 14, 10, 14); px(c, '#6e4524', x + w / 2 - 4, y + h - 13, 8, 13);
+    px(c, '#2b2118', x + w / 2 - 2, y + 34, 4, 6); px(c, '#9fc7e0', x + w / 2 - 1, y + 35, 2, 4);
+  }
   function clockHands(c, b, hour, minute) {
     const cx = b.x * T + b.w * T / 2, cy = b.y * T + 32;
     const ha = (hour % 12 + minute / 60) / 12 * Math.PI * 2, ma = minute / 60 * Math.PI * 2;
@@ -244,10 +293,36 @@ G.tiles = (function () {
       case 'stall': px(c, 'rgba(0,0,0,.18)', x, y + 13, 16, 2); px(c, '#5c3d22', x + 1, y + 7, 14, 7); px(c, '#a8763f', x + 2, y + 8, 12, 5); px(c, '#e05a4a', x + 3, y + 6, 3, 2); px(c, '#f29b4a', x + 7, y + 6, 3, 2); px(c, '#6fae55', x + 11, y + 6, 2, 2); for (let i = 0; i < 16; i += 4) px(c, i % 8 ? '#f6ecd9' : '#4f74a8', x + i, y, 4, 3); px(c, '#5c3d22', x + 1, y + 3, 1, 4); px(c, '#5c3d22', x + 14, y + 3, 1, 4); break;
       case 'bowl': px(c, '#4f74a8', x + 4, y + 9, 8, 4); px(c, '#6f93c4', x + 4, y + 9, 8, 1); px(c, '#c98a4b', x + 5, y + 8, 6, 1); break;
       case 'busstop': px(c, '#5c3d22', x + 7, y + 3, 2, 12); px(c, '#3f5f8a', x + 3, y - 2, 10, 7); px(c, '#f6ecd9', x + 5, y, 6, 3); break;
+      /* ---- v1.1 室内与新道具 ---- */
+      case 'sorter': px(c, '#5c3d22', x, y - 6, 16, 20); px(c, '#8a5a2b', x + 1, y - 5, 14, 18); for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) { px(c, '#5c3d22', x + 1 + j * 5, y - 5 + i * 4, 4, 1); px(c, '#f6ecd9', x + 2 + j * 5, y - 3 + i * 4, 2, 1); } break;
+      case 'crack': px(c, '#2b2118', x + 7, y + 2, 1, 6); px(c, '#2b2118', x + 8, y + 5, 1, 4); px(c, '#2b2118', x + 6, y + 7, 1, 3); px(c, '#f6ecd9', x + 8, y + 3, 2, 1); break;
+      case 'calendar': px(c, '#5c3d22', x + 3, y + 1, 10, 9); px(c, '#f6ecd9', x + 4, y + 2, 8, 7); px(c, '#c0392b', x + 4, y + 2, 8, 2); px(c, '#c0392b', x + 7, y + 5, 3, 3); px(c, '#f6ecd9', x + 8, y + 6); break;
+      case 'window': px(c, '#5c3d22', x + 2, y + 1, 12, 9); px(c, '#9fc7e0', x + 3, y + 2, 10, 7); px(c, '#5c3d22', x + 7, y + 2, 1, 7); px(c, '#d7ecf7', x + 4, y + 3, 2, 2); break;
+      case 'desk': sh(); px(c, '#5c3d22', x, y + 4, 16, 9); px(c, '#a8763f', x + 1, y + 4, 14, 3); px(c, '#5c3d22', x + 1, y + 12, 2, 3); px(c, '#5c3d22', x + 13, y + 12, 2, 3); px(c, '#f6ecd9', x + 4, y + 2, 7, 3); px(c, '#4f74a8', x + 11, y + 1, 2, 4); break;
+      case 'cabinet': sh(); px(c, '#5c3d22', x + 1, y - 2, 14, 16); px(c, '#8a5a2b', x + 2, y - 1, 12, 14); for (let i = 0; i < 3; i++) { px(c, '#5c3d22', x + 2, y + 3 + i * 4, 12, 1); px(c, '#f2c14e', x + 7, y + i * 4, 2, 1); } px(c, '#f6ecd9', x + 4, y + 8, 8, 2); break;
+      case 'counter': px(c, '#5c3d22', x, y + 1, 16, 14); px(c, '#a8763f', x, y + 1, 16, 4); px(c, '#8a5a2b', x, y + 6, 16, 8); px(c, '#5c3d22', x, y + 9, 16, 1); break;
+      case 'dogbed': px(c, '#4f74a8', x + 1, y + 6, 14, 8); px(c, '#6f93c4', x + 3, y + 7, 10, 5); px(c, '#f6ecd9', x + 5, y + 8, 6, 3); break;
+      case 'rug': px(c, '#a8553a', x, y + 1, 16, 14); px(c, '#c0603a', x + 1, y + 2, 14, 12); px(c, '#f2c14e', x + 3, y + 7, 10, 1); break;
+      case 'clockwork': { const a = (t ? t.time : 0) * (t && t.fixed ? 1.4 : 0); sh(); c.save(); c.translate(x + 8, y + 4); c.rotate(a * (tx % 2 ? 1 : -1)); c.fillStyle = '#8a6a20'; for (let i = 0; i < 8; i++) { c.rotate(Math.PI / 4); c.fillRect(-1.5, -10, 3, 4); } c.beginPath(); c.arc(0, 0, 7, 0, Math.PI * 2); c.fill(); c.fillStyle = '#f2c14e'; c.beginPath(); c.arc(0, 0, 5, 0, Math.PI * 2); c.fill(); c.fillStyle = '#5c3d22'; c.fillRect(-1, -1, 2, 2); c.restore(); break; }
+      case 'ladder': px(c, '#7a5230', x + 3, y - 8, 2, 22); px(c, '#7a5230', x + 11, y - 8, 2, 22); for (let i = -6; i < 14; i += 4) px(c, '#a8763f', x + 3, y + i, 10, 1); break;
+      case 'oven': px(c, '#5e5b55', x, y - 4, 16, 18); px(c, '#7d7a72', x + 1, y - 3, 14, 16); px(c, '#2b2118', x + 3, y + 3, 10, 7); px(c, t && t.warm ? '#f29b4a' : '#4a3a2a', x + 4, y + 4, 8, 5); px(c, '#5e5b55', x + 5, y - 8, 4, 5); break;
+      case 'frame': px(c, '#5c3d22', x + 1, y + 1, 6, 6); px(c, '#f6ecd9', x + 2, y + 2, 4, 4); px(c, '#5c3d22', x + 9, y + 2, 6, 7); px(c, '#c9a46a', x + 10, y + 3, 4, 5); px(c, '#e86a8a', x + 11, y + 4, 2, 2); break;
+      case 'shelf': px(c, '#5c3d22', x, y - 4, 16, 18); for (let i = 0; i < 3; i++) { px(c, '#a8763f', x + 1, y - 3 + i * 6, 14, 1); px(c, '#d9934f', x + 2, y - 6 + i * 6 + 4, 4, 2); px(c, '#e8b878', x + 8, y - 6 + i * 6 + 4, 5, 2); } break;
+      case 'table': sh(); px(c, '#5c3d22', x, y + 4, 16, 6); px(c, '#a8763f', x + 1, y + 4, 14, 3); px(c, '#5c3d22', x + 2, y + 10, 2, 4); px(c, '#5c3d22', x + 12, y + 10, 2, 4); px(c, '#f6ecd9', x + 5, y + 2, 6, 2); break;
+      case 'stairs': px(c, '#8f887a', x, y, 16, 16); for (let i = 0; i < 4; i++) { px(c, '#b9b2a3', x, y + i * 4, 16, 2); px(c, '#6e685e', x, y + i * 4 + 3, 16, 1); } break;
+      case 'beacon': { px(c, '#2b2118', x - 2, y - 6, 20, 20); px(c, '#5c3d22', x, y + 8, 16, 6); const lit = t && t.light; px(c, lit ? '#fff2b0' : '#7d7a72', x + 2, y - 4, 12, 12); px(c, lit ? '#ffd24a' : '#5e5b55', x + 5, y - 1, 6, 6); if (lit) { px(c, 'rgba(255,240,170,.25)', x - 8, y - 10, 32, 28); } break; }
+      case 'hollow': px(c, 'rgba(0,0,0,.2)', x - 4, y + 12, 24, 4); px(c, '#4f351f', x - 2, y - 6, 20, 20); px(c, '#6b4a2b', x, y - 6, 16, 20); px(c, '#4f351f', x + 3, y - 6, 1, 20); px(c, '#4f351f', x + 11, y - 6, 1, 20); px(c, '#1d1612', x + 4, y + 1, 8, 8); px(c, '#f6ecd9', x + 5, y + 5, 3, 2); px(c, '#ffffff', x + 8, y + 6, 3, 2); px(c, '#2f6b3a', x - 6, y - 16, 28, 12); px(c, '#3f8a4a', x - 4, y - 17, 24, 9); px(c, '#5aa860', x, y - 15, 6, 3); break;
+      case 'mushroom': px(c, '#f6ecd9', x + 6, y + 9, 3, 5); px(c, '#c0392b', x + 3, y + 5, 9, 4); px(c, '#ffffff', x + 5, y + 6, 2, 1); px(c, '#ffffff', x + 9, y + 6, 1, 1); break;
+      case 'stamp': { const b = Math.sin((t ? t.time : 0) * 4 + tx) > 0 ? 0 : 1; px(c, '#f6ecd9', x + 4, y + 4 + b, 8, 9); for (let i = 0; i < 4; i++) { px(c, '#d0c4b0', x + 4 + i * 2, y + 4 + b); px(c, '#d0c4b0', x + 4 + i * 2, y + 12 + b); } px(c, '#c0603a', x + 5, y + 6 + b, 6, 5); px(c, '#f2c14e', x + 7, y + 7 + b, 2, 2); break; }
+      case 'key': { const b = Math.sin((t ? t.time : 0) * 4) > 0 ? 0 : 1; px(c, '#f2c14e', x + 4, y + 6 + b, 4, 4); px(c, '#8a6a20', x + 5, y + 7 + b, 2, 2); px(c, '#f2c14e', x + 8, y + 7 + b, 5, 2); px(c, '#f2c14e', x + 11, y + 9 + b, 1, 2); break; }
+      case 'bottle': { const b = Math.sin((t ? t.time : 0) * 3) > 0 ? 0 : 1; px(c, 'rgba(0,0,0,.15)', x + 3, y + 12, 10, 2); px(c, '#7fb8a8', x + 4, y + 7 + b, 8, 4); px(c, '#a8d8c8', x + 5, y + 7 + b, 3, 1); px(c, '#8a5a2b', x + 12, y + 8 + b, 2, 2); px(c, '#f6ecd9', x + 6, y + 8 + b, 4, 2); break; }
+      case 'lostbox': sh(); px(c, '#5c3d22', x + 1, y + 2, 14, 12); px(c, '#a8763f', x + 2, y + 3, 12, 10); px(c, '#5c3d22', x + 2, y + 6, 12, 1); px(c, '#f6ecd9', x + 4, y + 8, 8, 3); px(c, '#c0392b', x + 5, y + 9, 6, 1); break;
+      case 'blackboard': px(c, '#5c3d22', x - 4, y + 1, 24, 10); px(c, '#2f5a3a', x - 3, y + 2, 22, 8); px(c, '#f6ecd9', x - 1, y + 4, 8, 1); px(c, '#f6ecd9', x + 1, y + 6, 12, 1); px(c, '#e86a8a', x + 13, y + 4, 3, 3); break;
       case 'spark': { const a = (Math.sin((t ? t.time : 0) * 5 + tx * 2) + 1) / 2; px(c, `rgba(255,236,160,${0.35 + a * 0.5})`, x + 7, y + 3, 2, 10); px(c, `rgba(255,236,160,${0.35 + a * 0.5})`, x + 3, y + 7, 10, 2); px(c, '#fff', x + 7, y + 7, 2, 2); break; }
       default: break;
     }
   }
 
-  return { T, isWalk, ground, trunk, canopy, bush, fence, water, building, clockTower, clockHands, prop };
+  Object.assign(api, { T, isWalk, ground, trunk, canopy, bush, fence, water, building, clockTower, lighthouse, clockHands, prop });
+  return api;
 })();

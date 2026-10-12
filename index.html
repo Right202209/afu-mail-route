@@ -21,14 +21,30 @@
         <div id="hud-left"><span id="hud-area">栖湾镇</span></div>
         <div id="hud-right">
           <span id="hud-letters">✉ 0/5</span>
-          <span id="hud-mem">✦ 0/6</span>
+          <span id="hud-mem">✦ 0/8</span>
           <button id="btn-bag" class="hud-btn" title="邮包 (Q)">邮包 Q</button>
+          <button id="btn-map" class="hud-btn" title="地图 (M)">地图 M</button>
+          <button id="btn-set" class="hud-btn" title="设置 (Esc)">⚙</button>
           <button id="btn-sound" class="hud-btn" title="声音 (M)">♪</button>
         </div>
       </div>
       <div id="banner"></div>
       <div id="toast"></div>
       <div id="prompt" class="hidden">空格 · 对话</div>
+      <div id="goal" class="hidden" title="点一下切换目标"></div>
+
+      <!-- Map -->
+      <div id="mapview" class="hidden">
+        <div class="bag-head"><span id="map-title" class="tab on">栖湾镇</span><button id="map-close" class="tab close">✕</button></div>
+        <div class="map-wrap"><canvas id="map-canvas"></canvas></div>
+        <div id="map-legend"></div>
+      </div>
+
+      <!-- Settings -->
+      <div id="settings" class="hidden">
+        <div class="bag-head"><span class="tab on">设置</span><button id="set-close" class="tab close">✕</button></div>
+        <div id="set-body"></div>
+      </div>
 
       <!-- Dialogue -->
       <div id="dialogue" class="hidden">
@@ -47,6 +63,7 @@
           <button data-tab="letters" class="tab on">信件</button>
           <button data-tab="items" class="tab">物品</button>
           <button data-tab="memories" class="tab">记忆</button>
+          <button data-tab="stamps" class="tab">邮票</button>
           <button id="bag-close" class="tab close">✕</button>
         </div>
         <div id="bag-body"></div>
@@ -87,6 +104,8 @@
           <button data-dir="down">▼</button>
         </div>
         <div id="abtns">
+          <button id="t-run">跑</button>
+          <button id="t-m" data-key="map">图</button>
           <button id="t-b" data-key="bark">汪</button>
           <button id="t-a" data-key="act">A</button>
         </div>
@@ -101,14 +120,19 @@
   <script src="js/sprites.js"></script>
   <script src="js/tiles.js"></script>
   <script src="data/world.js"></script>
+  <script src="data/world-more.js"></script>
   <script src="data/story-main.js"></script>
   <script src="data/story-town.js"></script>
   <script src="data/story-endings.js"></script>
+  <script src="data/story-v11.js"></script>
+  <script src="data/world-v12.js"></script>
+  <script src="data/story-v12.js"></script>
   <script src="js/state.js"></script>
   <script src="js/map.js"></script>
   <script src="js/input.js"></script>
   <script src="js/dialogue.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/extras.js"></script>
   <script src="js/game.js"></script>
 </body>
 </html>
