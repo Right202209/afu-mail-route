@@ -64,6 +64,7 @@ G.game = (function () {
 
   function bark() {
     G.audio.play('bark');
+    G.state.s.counters.barks = (G.state.s.counters.barks || 0) + 1; G.extras.checkAch();
     bubbles.push({ text: '汪！', x: player.x + 8, y: player.y - 4, t: 0, life: 0.9 });
     for (const id in S.npcs) {
       const p = npcPos(id);
@@ -300,6 +301,30 @@ G.game = (function () {
       ctx.fillStyle = 'rgba(255,240,170,.8)'; ctx.fillRect(lx - 3, ly - 3, 6, 6);
       ctx.restore();
     }
+    // 入夜：窗户亮灯、萤火虫
+    if (!G.map.def.indoor && tint > 3.6) {
+      const night = G.clamp((tint - 3.6) / 1.8, 0, 1);
+      ctx.save(); ctx.globalCompositeOperation = 'lighter';
+      if (inTown) G.map.def.buildings.forEach((b) => {
+        if (b.special) return;
+        const d = G.map.doorOf(b), gx = d.x * T + 8 - cam.x, gy = d.y * T + 4 - cam.y;
+        if (gx < -60 || gy < -60 || gx > G.VIEW_W + 60 || gy > G.VIEW_H + 60) return;
+        const fl = 0.85 + Math.sin(time * 3 + b.x) * 0.08;
+        const g = ctx.createRadialGradient(gx, gy, 2, gx, gy, 34);
+        g.addColorStop(0, `rgba(255,200,110,${0.42 * night * fl})`); g.addColorStop(1, 'rgba(255,200,110,0)');
+        ctx.fillStyle = g; ctx.fillRect(gx - 34, gy - 34, 68, 68);
+      });
+      const zone = G.map.id === 'woods' ? { x: 0, y: 0, w: G.map.def.w, h: G.map.def.h } : (G.map.def.areas || []).find((a) => a.name === '花坡');
+      if (zone) for (let i = 0; i < 26; i++) {
+        const fx = (zone.x + ((i * 37.7) % zone.w)) * T + Math.sin(time * 0.7 + i) * 18 - cam.x;
+        const fy = (zone.y + ((i * 23.3) % zone.h)) * T + Math.cos(time * 0.5 + i * 1.7) * 12 - cam.y;
+        const a = Math.max(0, Math.sin(time * 2.2 + i * 2.1)) * night;
+        if (a < 0.05 || fx < 0 || fy < 0 || fx > G.VIEW_W || fy > G.VIEW_H) continue;
+        ctx.fillStyle = `rgba(220,255,140,${a})`; ctx.fillRect(Math.round(fx), Math.round(fy), 1, 1);
+        ctx.fillStyle = `rgba(220,255,140,${a * 0.25})`; ctx.fillRect(Math.round(fx) - 1, Math.round(fy) - 1, 3, 3);
+      }
+      ctx.restore();
+    }
     // 黄昏起雾（灯塔点亮后雾会淡很多）
     if (inTown && G.settings.get('weather')) {
       let fog = G.clamp((st.counters.delivered - 2) / 2, 0, 1) * (st.flags.light_on ? 0.35 : 1) * (st.flags.final_read ? 0.4 : 1);
@@ -393,6 +418,7 @@ G.game = (function () {
     G.$('#hud').classList.add('hidden');
     const e = S.endings.find((x) => G.state.test(x.if));
     G.state.recordEnding(e.id);
+    G.state.s.flags.ending = true; G.extras.checkAch();
     G.audio.play('memory');
     setTimeout(() => {
       G.ui.ending(e);

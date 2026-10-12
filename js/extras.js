@@ -48,6 +48,7 @@ G.extras = (function () {
     clearTimeout(flashT); flashT = setTimeout(() => el.classList.remove('flash'), 1600);
   }
   function refresh() {
+    checkAch();
     const el = G.$('#goal');
     if (!el) return;
     const g = goal();
@@ -116,6 +117,49 @@ G.extras = (function () {
     G.$('#map-title').textContent = M.name;
   }
 
+  /* ---------- 成就 ---------- */
+  function checkAch() {
+    if (!G.game || G.game.mode !== 'play' && G.game.mode !== 'ending') return;
+    const m = G.state.meta(), st = G.state.s;
+    let dirty = false;
+    (S.achievements || []).forEach((a) => {
+      if (m.ach.includes(a.id) || !G.state.test(a.if)) return;
+      m.ach.push(a.id); dirty = true;
+      setTimeout(() => { G.audio.play('item'); G.ui.toast('★ 成就：' + a.name, 3000); }, 600);
+    });
+    st.mems.forEach((id) => { if (!m.mems.includes(id)) { m.mems.push(id); dirty = true; } });
+    if (dirty) G.state.saveMeta(m);
+  }
+
+  /* ---------- 图鉴（标题页） ---------- */
+  let galOpen = false, galTab = 'endings';
+  function openGallery() { galOpen = true; G.$('#gallery').classList.remove('hidden'); G.audio.play('select'); renderGallery(); }
+  function closeGallery() { galOpen = false; G.$('#gallery').classList.add('hidden'); }
+  function renderGallery() {
+    const m = G.state.meta(), body = G.$('#gal-body');
+    G.$('#gallery').querySelectorAll('[data-gtab]').forEach((b) => b.classList.toggle('on', b.dataset.gtab === galTab));
+    let h = '';
+    if (galTab === 'endings') {
+      h += `<p class="gal-sum">已见结局 ${m.endings.length} / ${S.endings.length}</p>`;
+      S.endings.forEach((e) => { const ok = m.endings.includes(e.id); h += `<div class="card${ok ? '' : ' locked'}"><h3>${ok ? G.esc(e.title) : '？？？'} <span class="st${ok ? ' done' : ''}">${ok ? '已见' : '未解锁'}</span></h3><p>${ok ? G.esc(e.sub) : '还有一种结局在等你。'}</p></div>`; });
+    } else if (galTab === 'ach') {
+      const A = S.achievements || [];
+      h += `<p class="gal-sum">成就 ${m.ach.length} / ${A.length}</p><div class="ach-grid">`;
+      A.forEach((a) => { const ok = m.ach.includes(a.id); h += `<div class="ach${ok ? ' ok' : ''}"><b>${ok ? '★' : '☆'} ${G.esc(ok ? a.name : '？？？')}</b><span>${G.esc(a.desc)}</span></div>`; });
+      h += '</div>';
+    } else {
+      h += `<p class="gal-sum">记忆 ${m.mems.length} / ${S.memories.length} · 点一下回放</p>`;
+      S.memories.forEach((mm, i) => { const ok = m.mems.includes(mm.id); h += `<div class="card${ok ? '' : ' locked'}"><h3>${i + 1}. ${ok ? G.esc(mm.title) : '？？？'}</h3>${ok ? `<button data-replay="${i}">回放</button>` : '<p>还没有找回这段记忆。</p>'}</div>`; });
+    }
+    body.innerHTML = h;
+    body.querySelectorAll('[data-replay]').forEach((b) => b.addEventListener('click', async () => {
+      const mm = S.memories[+b.dataset.replay];
+      G.$('#gallery').classList.add('hidden');
+      await G.ui.scene({ kind: 'sepia', title: mm.title, lines: mm.lines }, '记忆回放');
+      G.$('#gallery').classList.remove('hidden');
+    }));
+  }
+
   /* ---------- 设置 ---------- */
   const OPTS = [
     { k: 'text', name: '文字速度', vals: [['slow', '慢'], ['normal', '中'], ['fast', '快'], ['instant', '瞬间']] },
@@ -130,7 +174,7 @@ G.extras = (function () {
   function renderSettings() {
     const body = G.$('#set-body');
     body.innerHTML = OPTS.map((o, i) => `<div class="opt${i === setSel ? ' sel' : ''}" data-i="${i}"><span>${G.esc(o.name)}</span><span class="vals">${o.vals.map(([v, l]) => `<button data-k="${o.k}" data-v="${JSON.stringify(v).replace(/"/g, '&quot;')}" class="${G.settings.get(o.k) === v ? 'on' : ''}">${l}</button>`).join('')}</span></div>`).join('') +
-      '<p class="keys">方向键 / WASD 移动 · Shift 跑步 · 空格 互动 · X 汪 · Q 邮包 · M 地图 · P 声音 · F 全屏 · Esc 设置</p>';
+      '<p class="keys">方向键 / WASD 移动 · Shift 跑步 · 空格 互动（接飞盘时跳）· X 汪 · Q 邮包 · M 地图 · P 声音 · F 全屏 · Esc 设置</p>';
     body.querySelectorAll('button[data-k]').forEach((b) => b.addEventListener('click', () => { G.settings.set(b.dataset.k, JSON.parse(b.dataset.v)); G.audio.play('select'); renderSettings(); }));
   }
   function stepSetting(d) {
@@ -144,7 +188,18 @@ G.extras = (function () {
     G.$('#btn-set').addEventListener('click', () => (setOpen ? closeSettings() : G.game.canAct() && openSettings()));
     G.$('#map-close').addEventListener('click', closeMap);
     G.$('#set-close').addEventListener('click', closeSettings);
+    G.$('#btn-gallery').addEventListener('click', () => { G.audio.init(); openGallery(); });
+    G.$('#gal-close').addEventListener('click', closeGallery);
+    G.$('#gallery').querySelectorAll('[data-gtab]').forEach((b) => b.addEventListener('click', () => { galTab = b.dataset.gtab; G.audio.play('select'); renderGallery(); }));
     G.input.on((a) => {
+      if (galOpen && !G.ui.sceneOpen) {
+        const tabs = ['endings', 'ach', 'mems'];
+        if (a === 'back' || a === 'bag') closeGallery();
+        else if (a === 'dir:left' || a === 'dir:right') { galTab = tabs[(tabs.indexOf(galTab) + (a === 'dir:left' ? 2 : 1)) % 3]; G.audio.play('select'); renderGallery(); }
+        else if (a === 'dir:down') G.$('#gal-body').scrollTop += 40;
+        else if (a === 'dir:up') G.$('#gal-body').scrollTop -= 40;
+        return true;
+      }
       if (mapOpen) { if (a === 'map' || a === 'back' || a === 'act') closeMap(); return true; }
       if (setOpen) {
         if (a === 'back' || a === 'settings') closeSettings();
@@ -162,5 +217,5 @@ G.extras = (function () {
     setInterval(refresh, 1500);
   }
 
-  return { bind, refresh, openMap, closeMap, openSettings, closeSettings, get open() { return mapOpen || setOpen; }, lines };
+  return { bind, refresh, checkAch, openGallery, closeGallery, openMap, closeMap, openSettings, closeSettings, get open() { return mapOpen || setOpen || galOpen || (G.mini && G.mini.running); }, lines };
 })();

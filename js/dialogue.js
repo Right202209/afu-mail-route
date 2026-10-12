@@ -24,7 +24,7 @@ G.dialogue = (function () {
   function handle(events) {
     events.forEach((e) => {
       if (e.type === 'scene') pendingScenes.push(e.id);
-      else if (e.type === 'memory' || e.type === 'end') afterClose.push(e);
+      else if (e.type === 'memory' || e.type === 'end' || e.type === 'mini') afterClose.push(e);
       else G.ui.event(e);
     });
   }
@@ -144,6 +144,14 @@ G.dialogue = (function () {
     const ev = afterClose; afterClose = [];
     for (const e of ev) {
       if (e.type === 'memory') await G.ui.memory(e.id);
+    }
+    const mini = ev.find((e) => e.type === 'mini');
+    if (mini) {
+      const n = await G.mini.frisbee();
+      const st = G.state.s;
+      st.counters.frisbee_last = n; st.counters.frisbee = Math.max(st.counters.frisbee || 0, n);
+      G.state.save(G.game && G.game.player);
+      return start('jie_frisbee_end', onClose);
     }
     G.state.save(G.game && G.game.player);
     G.ui.refresh();

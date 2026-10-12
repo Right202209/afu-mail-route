@@ -40,6 +40,20 @@
         <div id="map-legend"></div>
       </div>
 
+      <!-- Mini game -->
+      <div id="mini" class="hidden"><canvas id="mini-canvas"></canvas><div class="mini-tip">← → 跑 · Shift 冲刺 · 空格 跳</div></div>
+
+      <!-- Gallery -->
+      <div id="gallery" class="hidden">
+        <div class="bag-head">
+          <button data-gtab="endings" class="tab on">结局</button>
+          <button data-gtab="ach" class="tab">成就</button>
+          <button data-gtab="mems" class="tab">记忆</button>
+          <button id="gal-close" class="tab close">✕</button>
+        </div>
+        <div id="gal-body"></div>
+      </div>
+
       <!-- Settings -->
       <div id="settings" class="hidden">
         <div class="bag-head"><span class="tab on">设置</span><button id="set-close" class="tab close">✕</button></div>
@@ -86,8 +100,9 @@
           <button id="btn-continue" class="menu-btn hidden">继续旅程</button>
           <button id="btn-new" class="menu-btn">新的一天</button>
         </div>
+        <button id="btn-gallery" class="gal-btn">图鉴 · 结局 / 成就 / 记忆</button>
         <div id="title-endings"></div>
-        <div class="title-keys">方向键 / WASD 移动 · 空格 对话 · Q 邮包 · X 汪 · M 声音</div>
+        <div class="title-keys">方向键 / WASD 移动 · Shift 跑 · 空格 对话 · Q 邮包 · M 地图 · X 汪 · Esc 设置</div>
       </div>
 
       <!-- Ending -->
@@ -127,11 +142,14 @@
   <script src="data/story-v11.js"></script>
   <script src="data/world-v12.js"></script>
   <script src="data/story-v12.js"></script>
+  <script src="data/world-v13.js"></script>
+  <script src="data/story-v13.js"></script>
   <script src="js/state.js"></script>
   <script src="js/map.js"></script>
   <script src="js/input.js"></script>
   <script src="js/dialogue.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/mini.js"></script>
   <script src="js/extras.js"></script>
   <script src="js/game.js"></script>
 </body>

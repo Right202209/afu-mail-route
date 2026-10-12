@@ -72,6 +72,7 @@ G.state = (function () {
         case 'scene': events.push({ type: 'scene', id: v }); break;
         case 'bell': events.push({ type: 'bell' }); break;
         case 'end': events.push({ type: 'end' }); break;
+        case 'mini': events.push({ type: 'mini', id: v }); break;
         default: console.warn('未知效果', e);
       }
     });
@@ -94,7 +95,11 @@ G.state = (function () {
   function hasSave() { try { return !!localStorage.getItem(KEY); } catch (e) { return false; } }
   function reset() { s = fresh(); try { localStorage.removeItem(KEY); } catch (e) { /* */ } }
 
-  function meta() { try { return JSON.parse(localStorage.getItem(META)) || { endings: [] }; } catch (e) { return { endings: [] }; } }
+  function meta() {
+    let m; try { m = JSON.parse(localStorage.getItem(META)); } catch (e) { /* */ }
+    return Object.assign({ endings: [], ach: [], mems: [] }, m || {});
+  }
+  function saveMeta(m) { try { localStorage.setItem(META, JSON.stringify(m)); } catch (e) { /* */ } }
   function recordEnding(id) {
     const m = meta();
     if (!m.endings.includes(id)) m.endings.push(id);
@@ -103,7 +108,7 @@ G.state = (function () {
 
   return {
     get s() { return s; },
-    test, apply, save, load, hasSave, reset, meta, recordEnding,
+    test, apply, save, load, hasSave, reset, meta, saveMeta, recordEnding,
     flag: (n) => !!s.flags[n],
   };
 })();

@@ -318,6 +318,8 @@ G.tiles = (function () {
       case 'bottle': { const b = Math.sin((t ? t.time : 0) * 3) > 0 ? 0 : 1; px(c, 'rgba(0,0,0,.15)', x + 3, y + 12, 10, 2); px(c, '#7fb8a8', x + 4, y + 7 + b, 8, 4); px(c, '#a8d8c8', x + 5, y + 7 + b, 3, 1); px(c, '#8a5a2b', x + 12, y + 8 + b, 2, 2); px(c, '#f6ecd9', x + 6, y + 8 + b, 4, 2); break; }
       case 'lostbox': sh(); px(c, '#5c3d22', x + 1, y + 2, 14, 12); px(c, '#a8763f', x + 2, y + 3, 12, 10); px(c, '#5c3d22', x + 2, y + 6, 12, 1); px(c, '#f6ecd9', x + 4, y + 8, 8, 3); px(c, '#c0392b', x + 5, y + 9, 6, 1); break;
       case 'blackboard': px(c, '#5c3d22', x - 4, y + 1, 24, 10); px(c, '#2f5a3a', x - 3, y + 2, 22, 8); px(c, '#f6ecd9', x - 1, y + 4, 8, 1); px(c, '#f6ecd9', x + 1, y + 6, 12, 1); px(c, '#e86a8a', x + 13, y + 4, 3, 3); break;
+      case 'chart': px(c, '#5c3d22', x - 3, y + 1, 22, 11); px(c, '#e8dcb8', x - 2, y + 2, 20, 9); px(c, '#7fb8d8', x - 2, y + 2, 20, 9); px(c, '#e8dcb8', x, y + 4, 4, 3); px(c, '#e8dcb8', x + 8, y + 3, 3, 2); px(c, '#e8dcb8', x + 13, y + 6, 3, 2); px(c, '#c0392b', x + 4, y + 5, 9, 1); break;
+      case 'net': sh(); px(c, '#7a6a5a', x + 2, y + 1, 1, 13); for (let i = 0; i < 4; i++) { px(c, '#c8b890', x + 3, y + 2 + i * 3, 10, 1); px(c, '#c8b890', x + 4 + i * 3, y + 2, 1, 11); } px(c, '#e86a3a', x + 11, y + 12, 3, 2); break;
       case 'spark': { const a = (Math.sin((t ? t.time : 0) * 5 + tx * 2) + 1) / 2; px(c, `rgba(255,236,160,${0.35 + a * 0.5})`, x + 7, y + 3, 2, 10); px(c, `rgba(255,236,160,${0.35 + a * 0.5})`, x + 3, y + 7, 10, 2); px(c, '#fff', x + 7, y + 7, 2, 2); break; }
       default: break;
     }
